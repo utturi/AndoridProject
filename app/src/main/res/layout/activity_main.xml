@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
     <ImageButton
+        android:id="@+id/menu"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:adjustViewBounds="true"
@@ -13,4 +15,34 @@
         android:scaleType="fitCenter"
         android:src="@drawable/menu" />
 
+    <ImageButton
+        android:id="@+id/mainbutton"
+        android:layout_width="380dp"
+        android:layout_height="230dp"
+        android:layout_below="@+id/menu"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/but1" />
+
+    <ImageButton
+        android:id="@+id/youtubebut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/youtubebut"
+        android:layout_below="@+id/mainbutton"
+        android:adjustViewBounds="true"
+        android:background="#FFFFFF"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/eatbut"
+       android:layout_toRightOf="@+id/youtubebut"
+        android:layout_below="@+id/mainbutton"
+        android:adjustViewBounds="true"
+        android:background="#FFFFFF"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="13dp" />
 </RelativeLayout>
