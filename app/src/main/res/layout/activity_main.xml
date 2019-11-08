@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+    //메뉴버튼
     <ImageButton
         android:id="@+id/menu"
         android:layout_width="40dp"
@@ -15,15 +16,22 @@
         android:scaleType="fitCenter"
         android:src="@drawable/menu" />
 
-    <ImageButton
+
+    <!--<DatePicker
+        android:id="@+id/dataPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+-->
+    //메인화면 - 큰 회색 화면
+    <Button
         android:id="@+id/mainbutton"
         android:layout_width="380dp"
         android:layout_height="230dp"
         android:layout_below="@+id/menu"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/but1" />
+        android:layout_marginTop="16dp" />
 
+    //유튜브 버튼
     <ImageButton
         android:id="@+id/youtubebut"
         android:layout_width="wrap_content"
@@ -35,6 +43,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp" />
 
+    //먹었다 버튼
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,4 +54,37 @@
         android:background="#FFFFFF"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="13dp" />
+
+    //커뮤니티 버튼
+    <ImageButton
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/youtubebut"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="80dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/communiti"
+        android:id="@+id/communite"/>
+
+    //직접등록버튼
+    <ImageButton
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="13dp"
+        android:layout_below="@+id/communite"
+        android:src="@drawable/directbutton"
+        android:background="#FFFFFF"
+        android:id="@+id/directbutton" />
+
+    //음성등록버튼
+    <ImageButton
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="13dp"
+        android:layout_below="@+id/directbutton"
+        android:src="@drawable/soundbutton"
+        android:background="#FFFFFF"
+        android:id="@+id/soundbutton" />
+
+
 </RelativeLayout>
