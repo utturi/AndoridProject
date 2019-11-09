@@ -1,14 +1,21 @@
 package com.example.andoridproject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -27,12 +34,15 @@ public class MainActivity extends AppCompatActivity {
     ImageButton soundbut; //사운드 버튼
     SQLiteDatabase database; //데이터베이스
 
+    private DrawerLayout drawerLayout;
+    private View drawerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = (Button)findViewById(R.id.testButton);
+        Button button = findViewById(R.id.testButton);
         mainbut = findViewById(R.id.mainbutton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         mDialog = new DatePickerDialog(this, listener, 2019, 11, 8);
 
         //SubActivity로 넘어가는 버튼
-       // mainbut = findViewById(R.id.mainbutton);
+        // mainbut = findViewById(R.id.mainbutton);
         mainbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +110,61 @@ public class MainActivity extends AppCompatActivity {
                 //mDialog.show();
             }
         });
+
+        // Navigation Drawer 버튼
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerView = (View) findViewById((R.id.drawer));
+
+
+        // menu버튼을 누르면 navigation Drawer가 나옴
+        Button menu = (Button) findViewById((R.id.menu));
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(drawerView);
+            }
+        });
+
+        // 뒤로 가기 버튼 누를 때
+        Button btn_close = findViewById(R.id.btn_close);
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawers();
+            }
+        });
+
+        drawerLayout.setDrawerListener(listener_);
+        drawerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
+
+    //
+    DrawerLayout.DrawerListener listener_ = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+        }
+
+        @Override
+        public void onDrawerOpened(@NonNull View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(@NonNull View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
+        }
+    };
 
     //달력출력함수
     private DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {

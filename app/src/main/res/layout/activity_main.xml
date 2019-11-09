@@ -1,105 +1,123 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--네비게이션 드로어-->
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity" >
 
-    //메뉴버튼
-    <ImageButton
-        android:id="@+id/menu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:adjustViewBounds="true"
-        android:background="#FFFFFF"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/menu" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
 
+        //메뉴버튼
 
-    <!--<DatePicker
-        android:id="@+id/dataPicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
--->
-    //메인화면 - 큰 회색 화면
-    <TextView
-        android:id="@+id/mainbutton"
-        android:layout_width="380dp"
-        android:layout_height="230dp"
-        android:background="#EBD3D3D3"
-        android:gravity="center"
-        android:textSize="45dp"
-        android:textStyle="bold"
-        android:text="음식이 없어요!"
-        android:layout_below="@+id/menu"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp" />
+        <Button
+            android:id="@+id/menu"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ic_menu_black_24dp"
+            android:scaleType="fitCenter" />
 
-    //유튜브 버튼
-    <ImageButton
-        android:id="@+id/youtubebut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/youtubebut"
-        android:layout_below="@+id/mainbutton"
-        android:adjustViewBounds="true"
-        android:background="#FFFFFF"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp" />
+        <!--<DatePicker
+            android:id="@+id/dataPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    -->
+        //메인화면 - 큰 회색 화면
 
-    //먹었다 버튼
-    <ImageButton
+        <TextView
+            android:id="@+id/mainbutton"
+            android:layout_width="380dp"
+            android:layout_height="230dp"
+            android:layout_below="@+id/menu"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#EBD3D3D3"
+            android:gravity="center"
+            android:text="음식이 없어요!"
+            android:textSize="45dp"
+            android:textStyle="bold" />
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/eatbut"
-       android:layout_toRightOf="@+id/youtubebut"
-        android:layout_below="@+id/mainbutton"
-        android:adjustViewBounds="true"
-        android:background="#FFFFFF"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="13dp" />
-    <Button
-        android:id="@+id/testButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/communite"
-        android:layout_alignTop="@+id/communite"
-        android:layout_alignBottom="@+id/communite"
-        android:layout_marginLeft="80dp"
-        android:text="DB TEST"/>
+        //유튜브 버튼
 
-    //커뮤니티 버튼
-    <ImageButton
-        android:layout_width="180dp"
-        android:layout_height="60dp"
-        android:layout_below="@+id/youtubebut"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="80dp"
-        android:background="#FFFFFF"
-        android:src="@drawable/communiti"
-        android:id="@+id/communite"/>
+        <ImageButton
+            android:id="@+id/youtubebut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mainbutton"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:adjustViewBounds="true"
+            android:background="#FFFFFF"
+            android:src="@drawable/youtubebut" />
 
-    //직접등록버튼
-    <ImageButton
-        android:layout_width="180dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="13dp"
-        android:layout_below="@+id/communite"
-        android:src="@drawable/directbutton"
-        android:background="#FFFFFF"
-        android:id="@+id/directbutton" />
+        //먹었다 버튼
 
-    //음성등록버튼
-    <ImageButton
-        android:layout_width="180dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="13dp"
-        android:layout_below="@+id/directbutton"
-        android:src="@drawable/soundbutton"
-        android:background="#FFFFFF"
-        android:id="@+id/soundbutton" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mainbutton"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@+id/youtubebut"
+            android:adjustViewBounds="true"
+            android:background="#FFFFFF"
+            android:src="@drawable/eatbut" />
 
+        <Button
+            android:id="@+id/testButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/communite"
+            android:layout_alignBottom="@+id/communite"
+            android:layout_marginLeft="80dp"
+            android:layout_toRightOf="@id/communite"
+            android:text="DB TEST" />
 
-</RelativeLayout>
+        //커뮤니티 버튼
+
+        <ImageButton
+            android:id="@+id/communite"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/youtubebut"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="80dp"
+            android:background="#FFFFFF"
+            android:src="@drawable/communiti" />
+
+        //직접등록버튼
+
+        <ImageButton
+            android:id="@+id/directbutton"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/communite"
+            android:layout_marginLeft="13dp"
+            android:background="#FFFFFF"
+            android:src="@drawable/directbutton" />
+
+        //음성등록버튼
+
+        <ImageButton
+            android:id="@+id/soundbutton"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/directbutton"
+            android:layout_marginLeft="13dp"
+            android:background="#FFFFFF"
+            android:src="@drawable/soundbutton" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/activity_drawer" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
