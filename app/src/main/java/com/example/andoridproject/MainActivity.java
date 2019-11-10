@@ -1,9 +1,7 @@
 package com.example.andoridproject;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
@@ -11,6 +9,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,22 +17,19 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    TextView mainbut; //음식이름 뜨는 큰 화면
-    ImageButton directbut; //직접등록버튼
-    DatePickerDialog mDialog; //달력사용
-    String TAG = "FoodName"; //직접등록 다이얼로그
-    String name;           //음식이름
-    ImageButton soundbut; //사운드 버튼
-    SQLiteDatabase database; //데이터베이스
-
+    TextView mainbut;           //음식이름 뜨는 큰 화면
+    ImageButton directbut;      //직접등록버튼
+    DatePickerDialog mDialog;   //달력사용
+    String TAG = "FoodName";    //직접등록 다이얼로그
+    String name;                //음식이름
+    ImageButton soundbut;       //사운드 버튼
+    public static Context CONTEXT;
     private DrawerLayout drawerLayout;
     private View drawerView;
 
@@ -41,15 +37,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button button = findViewById(R.id.testButton);
+        CONTEXT =this;
         mainbut = findViewById(R.id.mainbutton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectData("Food");
-            }
-        });
+        DBHelper helper = new DBHelper(CONTEXT);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
+        Cursor cursor = db.rawQuery(sql, null);
+        if(cursor.getCount()!=0) {
+            cursor.moveToNext();
+            mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
+        }
+        db.close();
 
         //직접등록버튼 입력 -> 달력(유통기한설정)
         directbut = findViewById(R.id.directbutton);
@@ -94,11 +92,12 @@ public class MainActivity extends AppCompatActivity {
         mDialog = new DatePickerDialog(this, listener, 2019, 11, 8);
 
         //SubActivity로 넘어가는 버튼
-        // mainbut = findViewById(R.id.mainbutton);
+        mainbut = findViewById(R.id.mainbutton);
         mainbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mDialog.show();
+                Intent intent = new Intent(MainActivity.this, SubmainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -166,57 +165,45 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    //달력출력함수
+    //달력출력및 DB추가
     private DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            openDatabase("Food.db");
-            createTable("Food");
-            insertData(name, year+"-"+monthOfYear+"-"+dayOfMonth,"Food");
-            mainbut.setText(name+"\n"+year+"-"+monthOfYear+"-"+dayOfMonth);
-
-            //((SubmainActivity)SubmainActivity.mContext).createTextView(name,year+"-"+monthOfYear+"-"+dayOfMonth);
+            monthOfYear+=1;               //월이 1작아서 1추가
+            String day;
+            if(dayOfMonth<10) {          //YYYY-MM-DD 형식으로 맞추기위해
+                day = "0" + dayOfMonth;
+            }
+            else
+                day = ""+dayOfMonth;
+            String date = year+"-"+monthOfYear+"-"+day;
+            DBHelper helper = new DBHelper(CONTEXT);
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.execSQL("INSERT INTO FOOD (name, date) VALUES (?, ?)",new String[]{name,date});
+            String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
+            Cursor cursor = db.rawQuery(sql, null);
+            cursor.moveToNext();
+            mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
+            db.close();
         }
     };
-    public void openDatabase(String databaseName)
-    {
-        database = openOrCreateDatabase(databaseName,MODE_PRIVATE,null);
-    }
-    public void createTable(String tableName)
-    {
 
-        if(database != null)
-        {
-            String sql = "Create Table IF NOT EXISTS " + tableName+ " (_id integer primary key autoincrement, name text, date text)";
-            database.execSQL(sql);
+    //화면 새로고침
+    @Override
+    public void onResume() {
+        super.onResume();
+        DBHelper helper = new DBHelper(CONTEXT);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
+        Cursor cursor = db.rawQuery(sql, null);
+        if(cursor.getCount()!=0) {
+            cursor.moveToNext();
+            mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
         }
+        else
+            mainbut.setText("음식이 없어요!");
+        db.close();
     }
-    public void insertData(String name, String date,String tablename)
-    {
-        if(database!=null)
-        {
-            String sql = "insert into " + tablename+ "(name, date) values(?, ?)";
-            Object[] params = {name, date};
-            database.execSQL(sql,params);
-        }
-    }
-    public void selectData(String tableName)
-    {
 
-        if(database!=null)
-        {
-            String str ="";
-            String sql = "select name, date from " + tableName;
-            Cursor cursor = database.rawQuery(sql,null);
-            for(int i = 0; i <cursor.getCount();i++)
-            {
-                cursor.moveToNext();
-                String name = cursor.getString(0);
-                String date = cursor.getString(1);
 
-                str = str + "#"+i+" -> "+name+", "+date+"/n";
-            }
-            Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
-        }
-    }
 }

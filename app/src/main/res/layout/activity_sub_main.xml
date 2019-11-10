@@ -1,87 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
     android:gravity="top">
-    <LinearLayout
-        android:id="@+id/subMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/textTable1"
-            android:visibility="invisible"
-            android:text="name\ndate"
-            android:textStyle="bold"
-            android:textSize="45dp"
-            android:gravity="center"
-            android:layout_gravity="top"
-            android:layout_width="380dp"
-            android:layout_height="110dp"
-            android:background="#EBD3D3D3"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"/>
-        <TextView
-            android:id="@+id/textTable2"
-            android:visibility="invisible"
-            android:text="name\ndate"
-            android:textStyle="bold"
-            android:textSize="45dp"
-            android:gravity="center"
-            android:layout_gravity="top"
-            android:layout_width="380dp"
-            android:layout_height="110dp"
-            android:background="#EBD3D3D3"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"/>
-        <TextView
-            android:id="@+id/textTable3"
-            android:visibility="invisible"
-            android:text="name\ndate"
-            android:textStyle="bold"
-            android:textSize="45dp"
-            android:gravity="center"
-            android:layout_gravity="top"
-            android:layout_width="380dp"
-            android:layout_height="110dp"
-            android:background="#EBD3D3D3"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"/>
-        <TextView
-            android:id="@+id/textTable4"
-            android:visibility="invisible"
-            android:text="name\ndate"
-            android:textStyle="bold"
-            android:textSize="45dp"
-            android:gravity="center"
-            android:layout_gravity="top"
-            android:layout_width="380dp"
-            android:layout_height="110dp"
-            android:background="#EBD3D3D3"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"/>
-        <TextView
-            android:id="@+id/textTable5"
-            android:visibility="invisible"
-            android:text="name\ndate"
-            android:textStyle="bold"
-            android:textSize="45dp"
-            android:gravity="center"
-            android:layout_gravity="top"
-            android:layout_width="380dp"
-            android:layout_height="110dp"
-            android:background="#EBD3D3D3"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"/>
-    </LinearLayout>
-    <ImageButton
-        android:id="@+id/deleteButton"
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="670dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="16dp"
+        android:dividerHeight="16dp"
+        android:divider="#ffffff"/>
+    <ImageView
+        android:id="@+id/deleteview"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:scaleType="fitXY"
-        android:src="@drawable/delete_button"
+        android:src="@drawable/delteview"
         android:background="?attr/selectableItemBackground"
-        android:layout_gravity="bottom"/>>
+        android:layout_alignParentBottom="true"/>
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="저장된 목록 0개"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"/>
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/delete_button"
+        android:layout_above="@+id/textview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp" />
+    <Button
+        android:id="@+id/execute_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/deleteButton"
+        android:layout_alignBottom="@+id/deleteButton"
+        android:visibility="invisible"
+        android:text="delete"/>
 
-</LinearLayout>
+</RelativeLayout>
