@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="저장된 목록 0개"
+        android:fontFamily="@font/dream_mid"
         android:textSize="25dp"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
@@ -47,6 +48,9 @@
         android:layout_toRightOf="@+id/deleteButton"
         android:layout_alignBottom="@+id/deleteButton"
         android:visibility="invisible"
-        android:text="delete"/>
+        android:background="#F44336"
+        android:fontFamily="@font/dream_mid"
+        android:text="delete"
+        android:textColor="#ffff"/>
 
 </RelativeLayout>

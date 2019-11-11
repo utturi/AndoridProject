@@ -21,6 +21,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
     TextView mainbut;           //음식이름 뜨는 큰 화면
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     String TAG = "FoodName";    //직접등록 다이얼로그
     String name;                //음식이름
     ImageButton soundbut;       //사운드 버튼
+    ImageButton layer[];
+
     public static Context CONTEXT;
     private DrawerLayout drawerLayout;
     private View drawerView;
@@ -39,6 +46,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         CONTEXT =this;
         mainbut = findViewById(R.id.mainbutton);
+        layer = new ImageButton[10];
+        layer[0] = findViewById(R.id.layer1);
+        layer[1] = findViewById(R.id.layer2);
+        layer[2] = findViewById(R.id.layer3);
+        layer[3]= findViewById(R.id.layer4);
+        layer[4] = findViewById(R.id.layer5);
+        layer[5] = findViewById(R.id.layer6);
+        layer[6] = findViewById(R.id.layer7);
+        layer[7] = findViewById(R.id.layer8);
+        layer[8] = findViewById(R.id.layer9);
+        layer[9] = findViewById(R.id.layer10);
         DBHelper helper = new DBHelper(CONTEXT);
         SQLiteDatabase db = helper.getWritableDatabase();
         String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
@@ -48,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
         }
         db.close();
-
+        stackGage();
         //직접등록버튼 입력 -> 달력(유통기한설정)
         directbut = findViewById(R.id.directbutton);
         directbut.setOnClickListener(new View.OnClickListener() {
@@ -184,7 +202,9 @@ public class MainActivity extends AppCompatActivity {
             Cursor cursor = db.rawQuery(sql, null);
             cursor.moveToNext();
             mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
+            Toast.makeText(getApplicationContext(),"음식이 등록되었습니다~",Toast.LENGTH_LONG).show();
             db.close();
+            stackGage();
         }
     };
 
@@ -203,7 +223,48 @@ public class MainActivity extends AppCompatActivity {
         else
             mainbut.setText("음식이 없어요!");
         db.close();
+        stackGage();
     }
 
+    public void stackGage()
+    {
+        int count = 0; //아이템 개수
+        long now  = System.currentTimeMillis();
+        Date mdate = new Date(now);
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
+        String getTime = simpleDate.format(mdate);
+        getTime = getTime.replace("-","");
+        int currentTime = Integer.parseInt(getTime);
+        DBHelper helper = new DBHelper(CONTEXT);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String sql = "SELECT name, date FROM FOOD ORDER BY date DESC";
+        Cursor cursor = db.rawQuery(sql, null);
+        //초기화
+        for(int i = 0; i < 10; i++)
+            layer[i].setBackgroundColor(0XCCCCCCCC);
+        //색지정
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToNext();
+            String date = cursor.getString(1);
+            date = date.replace("-","");
+            int database = Integer.parseInt(date);
+            int limit_time = database-currentTime;
+            if(limit_time<0&&count<10) {
+                layer[i].setBackgroundColor(0XFFF44336);
+                count++;
+            }
+            else if(limit_time<=4 && count<10)
+            {
+                layer[i].setBackgroundColor(0xFFFFEB3B);
+                count++;
+            }
+            else if(count<10)
+            {
+                layer[i].setBackgroundColor(0XFF4CAF50);
+                count++;
+            }
+        }
+        db.close();
+    }
 
 }

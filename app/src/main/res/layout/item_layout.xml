@@ -10,8 +10,10 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="name"
-        android:textSize="45dp"
+        android:fontFamily="@font/happy_mid"
+        android:textSize="35dp"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"/>
     <CheckBox
@@ -27,8 +29,9 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/dream_mid"
         android:text="date"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:layout_below="@+id/name"
         android:layout_centerHorizontal="true"/>
 

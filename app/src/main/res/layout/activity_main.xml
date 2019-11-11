@@ -62,6 +62,7 @@
         //먹었다 버튼
 
         <ImageButton
+            android:id="@+id/eatBut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/mainbutton"
@@ -112,6 +113,67 @@
             android:background="#FFFFFF"
             android:src="@drawable/soundbutton" />
 
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="250dp"
+            android:layout_toRightOf="@+id/communite"
+            android:layout_below="@+id/eatBut"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="70dp"
+            android:orientation="vertical"
+            android:gravity="bottom">
+
+            <ImageButton
+                android:id="@+id/layer10"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer9"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer8"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer7"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer6"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer5"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer4"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer3"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer2"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#cccc"/>
+            <ImageButton
+                android:id="@+id/layer1"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#CCCC"/>
+        </LinearLayout>
     </RelativeLayout>
 
     <include layout="@layout/activity_drawer" />
