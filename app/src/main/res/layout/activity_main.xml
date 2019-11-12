@@ -40,12 +40,12 @@
             android:layout_below="@+id/menu"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/design_button"
-            android:gravity="center"
-            android:text="음식이 없어요!"
-
-            android:textSize="45dp"
-            android:fontFamily="@font/dream_mid"
+            android:background="@drawable/main_button"
+            android:gravity="left"
+            android:textColor="#ffff"
+            android:text="\n\n     음식이 없어요"
+            android:textSize="40dp"
+            android:fontFamily="@font/happy_mid"
             android:textStyle="bold" />
         //유튜브 버튼
 
