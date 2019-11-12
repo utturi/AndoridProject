@@ -5,12 +5,12 @@
     android:layout_marginLeft="23dp"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="30dp"
-    android:background="#d3d3d3">
+    android:background="@drawable/design_button">
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="name"
         android:fontFamily="@font/happy_mid"
         android:textSize="35dp"
@@ -29,6 +29,7 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/dream_mid"
         android:text="date"
         android:textSize="25dp"

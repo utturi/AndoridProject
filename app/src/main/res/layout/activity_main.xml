@@ -40,12 +40,13 @@
             android:layout_below="@+id/menu"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:background="#EBD3D3D3"
+            android:background="@drawable/design_button"
             android:gravity="center"
             android:text="음식이 없어요!"
-            android:textSize="45dp"
-            android:textStyle="bold" />
 
+            android:textSize="45dp"
+            android:fontFamily="@font/dream_mid"
+            android:textStyle="bold" />
         //유튜브 버튼
 
         <ImageButton
@@ -114,65 +115,65 @@
             android:src="@drawable/soundbutton" />
 
         <LinearLayout
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="250dp"
             android:layout_toRightOf="@+id/communite"
             android:layout_below="@+id/eatBut"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="95dp"
             android:layout_marginTop="70dp"
             android:orientation="vertical"
             android:gravity="bottom">
 
             <ImageButton
                 android:id="@+id/layer10"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
-                android:background="#cccc"/>
+                android:layout_width="120dp"
+                android:layout_height="23dp"
+                android:background="@drawable/nomal_top"/>
             <ImageButton
                 android:id="@+id/layer9"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer8"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer7"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer6"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer5"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer4"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer3"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer2"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
+                android:layout_width="120dp"
+                android:layout_height="23dp"
                 android:background="#cccc"/>
             <ImageButton
                 android:id="@+id/layer1"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
-                android:background="#CCCC"/>
+                android:layout_width="120dp"
+                android:layout_height="23dp"
+                android:background="@drawable/nomal_bottom"/>
         </LinearLayout>
     </RelativeLayout>
 

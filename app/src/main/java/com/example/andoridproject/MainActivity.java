@@ -2,6 +2,7 @@ package com.example.andoridproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
@@ -12,6 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -57,16 +60,28 @@ public class MainActivity extends AppCompatActivity {
         layer[7] = findViewById(R.id.layer8);
         layer[8] = findViewById(R.id.layer9);
         layer[9] = findViewById(R.id.layer10);
-        DBHelper helper = new DBHelper(CONTEXT);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
-        Cursor cursor = db.rawQuery(sql, null);
-        if(cursor.getCount()!=0) {
-            cursor.moveToNext();
-            mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
-        }
-        db.close();
-        stackGage();
+        ImageButton eat_button = findViewById(R.id.eatBut);
+        setMainbut();
+        setGage();
+        eat_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBHelper helper = new DBHelper(CONTEXT);
+                SQLiteDatabase db = helper.getWritableDatabase();
+                String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
+                Cursor cursor = db.rawQuery(sql, null);
+                if (cursor.getCount() != 0) {
+                    cursor.moveToNext();
+                    String name = cursor.getString(0);
+                    String date = cursor.getString(1);
+                    sql = "DELETE FROM FOOD WHERE name = '" + name + "' AND date = '" + date + "';";
+                    db.execSQL(sql);
+                    Toast.makeText(getApplicationContext(),"먹었어요~",Toast.LENGTH_SHORT).show();
+                }
+                db.close();
+                onResume();
+            }
+        });
         //직접등록버튼 입력 -> 달력(유통기한설정)
         directbut = findViewById(R.id.directbutton);
         directbut.setOnClickListener(new View.OnClickListener() {
@@ -188,13 +203,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             monthOfYear+=1;               //월이 1작아서 1추가
-            String day;
-            if(dayOfMonth<10) {          //YYYY-MM-DD 형식으로 맞추기위해
+            String day = ""+dayOfMonth;
+            String month = ""+monthOfYear;
+            if(dayOfMonth < 10) {          //YYYY-MM-DD 형식으로 맞추기위해
                 day = "0" + dayOfMonth;
             }
-            else
-                day = ""+dayOfMonth;
-            String date = year+"-"+monthOfYear+"-"+day;
+            if(monthOfYear < 10)
+                month = "0" + monthOfYear;
+            String date = year+"-"+month+"-"+day;
             DBHelper helper = new DBHelper(CONTEXT);
             SQLiteDatabase db = helper.getWritableDatabase();
             db.execSQL("INSERT INTO FOOD (name, date) VALUES (?, ?)",new String[]{name,date});
@@ -202,9 +218,10 @@ public class MainActivity extends AppCompatActivity {
             Cursor cursor = db.rawQuery(sql, null);
             cursor.moveToNext();
             mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
-            Toast.makeText(getApplicationContext(),"음식이 등록되었습니다~",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"음식이 등록되었습니다~",Toast.LENGTH_SHORT).show();
             db.close();
-            stackGage();
+            setGage();
+            setMainbut();
         }
     };
 
@@ -223,10 +240,40 @@ public class MainActivity extends AppCompatActivity {
         else
             mainbut.setText("음식이 없어요!");
         db.close();
-        stackGage();
+        setGage();
+        setMainbut();
     }
-
-    public void stackGage()
+    //MainButton 구성
+    public void setMainbut()
+    {
+        mainbut.setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.design_button));
+        mainbut.setTextColor(Color.parseColor("#000000"));
+        DBHelper helper = new DBHelper(CONTEXT);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
+        Cursor cursor = db.rawQuery(sql, null);
+        if(cursor.getCount()!=0) {
+            cursor.moveToNext();
+            mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
+            long now  = System.currentTimeMillis();
+            Date mdate = new Date(now);
+            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
+            String getTime = simpleDate.format(mdate);
+            getTime = getTime.replace("-","");
+            int currentTime = Integer.parseInt(getTime);
+            String date = cursor.getString(1);
+            date = date.replace("-","");
+            int database = Integer.parseInt(date);
+            int limit_time = database-currentTime;
+            if(limit_time<0) {
+                mainbut.setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.red_button));
+                mainbut.setTextColor(Color.parseColor("#FFFFFF"));
+            }
+        }
+        db.close();
+    }
+    //Gage구성
+    public void setGage()
     {
         int count = 0; //아이템 개수
         long now  = System.currentTimeMillis();
@@ -240,8 +287,13 @@ public class MainActivity extends AppCompatActivity {
         String sql = "SELECT name, date FROM FOOD ORDER BY date DESC";
         Cursor cursor = db.rawQuery(sql, null);
         //초기화
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; i++) {
             layer[i].setBackgroundColor(0XCCCCCCCC);
+            if(i==0)
+                layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.nomal_bottom));
+            else if(i==9)
+                layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.nomal_top));
+        }
         //색지정
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToNext();
@@ -251,16 +303,28 @@ public class MainActivity extends AppCompatActivity {
             int limit_time = database-currentTime;
             if(limit_time<0&&count<10) {
                 layer[i].setBackgroundColor(0XFFF44336);
+                if(count==0)
+                    layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.red_bottom));
+                else if(count==9)
+                    layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.red_top));
                 count++;
             }
             else if(limit_time<=4 && count<10)
             {
                 layer[i].setBackgroundColor(0xFFFFEB3B);
+                if(count==0)
+                    layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.yellow_bottom));
+                else if(count==9)
+                    layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.yellow_top));
                 count++;
             }
             else if(count<10)
             {
                 layer[i].setBackgroundColor(0XFF4CAF50);
+                if(count==0)
+                    layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.green_bottom));
+                else if(count==9)
+                    layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.green_top));
                 count++;
             }
         }

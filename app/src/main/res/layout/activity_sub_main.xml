@@ -48,7 +48,7 @@
         android:layout_toRightOf="@+id/deleteButton"
         android:layout_alignBottom="@+id/deleteButton"
         android:visibility="invisible"
-        android:background="#F44336"
+        android:background="@drawable/red_button"
         android:fontFamily="@font/dream_mid"
         android:text="delete"
         android:textColor="#ffff"/>
