@@ -3,6 +3,7 @@ package com.example.andoridproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import android.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     DatePickerDialog mDialog;   //달력사용
     String TAG = "FoodName";    //직접등록 다이얼로그
     String name;                //음식이름
+    ImageButton youtube_but;    //유튜브 버튼
     ImageButton soundbut;       //사운드 버튼
     ImageButton layer[];        //gage배열
 
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     //대호
     public static Context CONTEXT;
     private DrawerLayout drawerLayout;
-    private View drawerView;
+    private View drawerView;           //Navigation Drawer View
 
     //의현
     private static final int REQUEST_CODE = 1234;
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         layer[8] = findViewById(R.id.layer9);
         layer[9] = findViewById(R.id.layer10);
         ImageButton eat_button = findViewById(R.id.eatBut);
-        ImageButton youtube = findViewById(R.id.youtubebut);
+
         //ViewPager
         indicator = (CircleIndicator) findViewById(R.id.indicator);
         viewPager = (ViewPager) findViewById(R.id.mainbutton) ;
@@ -95,13 +98,40 @@ public class MainActivity extends AppCompatActivity {
                 onResume();
             }
         });
-        youtube.setOnClickListener(new View.OnClickListener(){
+
+        // Youtube 버튼
+        youtube_but = findViewById(R.id.youtubebut);
+        youtube_but.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),""+viewPager.getCurrentItem(),Toast.LENGTH_SHORT).show();
-                indicator.getDataSetObserver();
+                ListViewItem[] items;
+                DBHelper helper = new DBHelper(CONTEXT);
+                SQLiteDatabase db = helper.getWritableDatabase();
+                String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
+                Cursor cursor = db.rawQuery(sql, null);
+                if (cursor.getCount() != 0) {
+                    cursor.moveToNext();
+                    items = new ListViewItem[cursor.getCount()];
+                    for(int i = 0; i < viewPager.getCurrentItem(); i++) {
+                        cursor.moveToNext();
+                        String name = cursor.getString(0);
+                        String date = cursor.getString(1);
+                        items[i] = new ListViewItem();
+                        items[i].setName(name);
+                        items[i].setDate(date);
+                    }
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" +
+                            cursor.getString(0) + " 레시피"));
+                    startActivity(intent);
+                    //indicator.getDataSetObserver();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/"));
+                    startActivity(intent);
+                }
+                db.close();
             }
         });
+
         //의현 - 음성등록
         soundbut = findViewById(R.id.soundbutton);
 
@@ -164,10 +194,10 @@ public class MainActivity extends AppCompatActivity {
 
         // DatePickerDialog
         mDialog = new DatePickerDialog(this, listener, 2019, 11, 8);
+
         // Navigation Drawer 버튼
         drawerLayout = findViewById(R.id.drawer_layout);
-        drawerView = (View) findViewById((R.id.drawer));
-
+        drawerView = (View) findViewById((R.id.nav_view));
 
         // menu버튼을 누르면 navigation Drawer가 나옴
         Button menu = (Button) findViewById((R.id.menu));
@@ -175,15 +205,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.openDrawer(drawerView);
-            }
-        });
-
-        // 뒤로 가기 버튼 누를 때
-        Button btn_close = findViewById(R.id.btn_close);
-        btn_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.closeDrawers();
             }
         });
 
@@ -196,7 +217,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //
+    // Navigation Drawer에서 뒤로가기 할 때
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     DrawerLayout.DrawerListener listener_ = new DrawerLayout.DrawerListener() {
         @Override
         public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -310,8 +341,7 @@ public class MainActivity extends AppCompatActivity {
         setMainbut();
     }
 
-    //화면 새로고침
-
+    // 화면 새로고침
     @Override
     public void onResume() {
         super.onResume();
@@ -319,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         setGage();
     }
 
-    //MainButton 구성
+    // MainButton 구성
     public void setMainbut() {
         ListViewItem[] items;
         DBHelper helper = new DBHelper(CONTEXT);
@@ -352,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
         indicator.setViewPager(viewPager);
     }
 
-    //Gage구성
+    // Gage구성
     public void setGage() {
         int count = 0; //아이템 개수
         long now = System.currentTimeMillis();
