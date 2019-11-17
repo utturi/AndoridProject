@@ -4,50 +4,46 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-
+import androidx.viewpager.widget.ViewPager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import me.relex.circleindicator.CircleIndicator;
+
 
 public class MainActivity extends AppCompatActivity {
-    TextView mainbut;           //음식이름 뜨는 큰 화면
     ImageButton directbut;      //직접등록버튼
     DatePickerDialog mDialog;   //달력사용
     String TAG = "FoodName";    //직접등록 다이얼로그
     String name;                //음식이름
     ImageButton soundbut;       //사운드 버튼
-    ImageButton layer[];
+    ImageButton layer[];        //gage배열
 
+    private ViewPager viewPager ;           //뷰페이저
+    private MainPagerAdapter pagerAdapter ; //어댑터
+    private CircleIndicator indicator;      //인디케이터
+
+    //대호
     public static Context CONTEXT;
     private DrawerLayout drawerLayout;
     private View drawerView;
@@ -62,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         CONTEXT = this;
-        mainbut = findViewById(R.id.mainbutton);
         layer = new ImageButton[10];
         layer[0] = findViewById(R.id.layer1);
         layer[1] = findViewById(R.id.layer2);
@@ -75,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
         layer[8] = findViewById(R.id.layer9);
         layer[9] = findViewById(R.id.layer10);
         ImageButton eat_button = findViewById(R.id.eatBut);
+        ImageButton youtube = findViewById(R.id.youtubebut);
+        //ViewPager
+        indicator = (CircleIndicator) findViewById(R.id.indicator);
+        viewPager = (ViewPager) findViewById(R.id.mainbutton) ;
         setMainbut();
         setGage();
         eat_button.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +95,13 @@ public class MainActivity extends AppCompatActivity {
                 onResume();
             }
         });
-
+        youtube.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),""+viewPager.getCurrentItem(),Toast.LENGTH_SHORT).show();
+                indicator.getDataSetObserver();
+            }
+        });
         //의현 - 음성등록
         soundbut = findViewById(R.id.soundbutton);
 
@@ -104,9 +109,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isConnected()) {
+                    Toast.makeText(getApplicationContext(),"음식이름 기한날짜 순으로 말해주세요!\nex) 돼지갈비 2019년 11월 12일",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"음식이름 날짜 순으로 입력하세요~");
                     startActivityForResult(intent, REQUEST_CODE);
                 } else {
                     Toast.makeText(getApplicationContext(), "Plese Connect to Internet", Toast.LENGTH_LONG).show();
@@ -157,17 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
         // DatePickerDialog
         mDialog = new DatePickerDialog(this, listener, 2019, 11, 8);
-
-        //SubActivity로 넘어가는 버튼
-        mainbut = findViewById(R.id.mainbutton);
-        mainbut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SubmainActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // Navigation Drawer 버튼
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerView = (View) findViewById((R.id.drawer));
@@ -239,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             matches_text = data1
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            //Toast.makeText(getApplicationContext(),matches_text.get(position),Toast.LENGTH_LONG).show();
             String text = matches_text.get(0).replace(" ", "");
             String name = "", data = "";
             String[] final_arr;
@@ -253,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
             }
             data = data.replace("년", "-");
             data = data.replace("월", "-");
-            Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
             String[] temp_data = data.split("-");
             String date = ""; //최종 년-월-일
 
@@ -310,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
         String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
         Cursor cursor = db.rawQuery(sql, null);
         cursor.moveToNext();
-        mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
         Toast.makeText(getApplicationContext(), "음식이 등록되었습니다~", Toast.LENGTH_SHORT).show();
         db.close();
         setGage();
@@ -318,53 +311,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //화면 새로고침
+
     @Override
     public void onResume() {
         super.onResume();
-        DBHelper helper = new DBHelper(CONTEXT);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
-        Cursor cursor = db.rawQuery(sql, null);
-        if (cursor.getCount() != 0) {
-            cursor.moveToNext();
-            mainbut.setText(cursor.getString(0) + "\n" + cursor.getString(1));
-            mainbut.setGravity(Gravity.LEFT);
-        } else {
-            mainbut.setText("음식이 없어요!");
-            mainbut.setGravity(Gravity.CENTER);
-        }
-        db.close();
-        setGage();
         setMainbut();
+        setGage();
     }
 
     //MainButton 구성
     public void setMainbut() {
-        mainbut.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.main_button));
+        ListViewItem[] items;
         DBHelper helper = new DBHelper(CONTEXT);
         SQLiteDatabase db = helper.getWritableDatabase();
         String sql = "SELECT name, date FROM FOOD ORDER BY date ASC";
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor.getCount() != 0) {
-            cursor.moveToNext();
-            mainbut.setText("\n   "+cursor.getString(0)+"          \n\n                 D-DAY\n           "+cursor.getString(1));
-            long now = System.currentTimeMillis();
-            mainbut.setGravity(Gravity.LEFT);
-            Date mdate = new Date(now);
-            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
-            String getTime = simpleDate.format(mdate);
-            getTime = getTime.replace("-", "");
-            int currentTime = Integer.parseInt(getTime);
-            String date = cursor.getString(1);
-            date = date.replace("-", "");
-            int database = Integer.parseInt(date);
-            int limit_time = database - currentTime;
-            if (limit_time < 0) {
-                mainbut.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.red_button));
-                mainbut.setTextColor(Color.parseColor("#FFFFFF"));
+            items = new ListViewItem[cursor.getCount()];
+            for(int i = 0; i<cursor.getCount();i++) {
+                cursor.moveToNext();
+                String name = cursor.getString(0);
+                String date = cursor.getString(1);
+                items[i] = new ListViewItem();
+                items[i].setName(name);
+                items[i].setDate(date);
             }
         }
+        else
+        {
+            items = new ListViewItem[1];
+            items[0] = new ListViewItem();
+            String name = "음식이 없어요!";
+            items[0].setName(name);
+            items[0].setDate("");
+        }
         db.close();
+        pagerAdapter = new MainPagerAdapter(this,items) ;
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setPageMargin(20);
+        indicator.setViewPager(viewPager);
     }
 
     //Gage구성
@@ -395,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
             date = date.replace("-", "");
             int database = Integer.parseInt(date);
             int limit_time = database - currentTime;
-            if (limit_time < 0 && count < 10) {
+            if (limit_time <= 0 && count < 10) {
                 layer[i].setBackgroundColor(0XFFF44336);
                 if (count == 0)
                     layer[i].setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.red_bottom));

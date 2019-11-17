@@ -33,20 +33,23 @@
     -->
         //메인화면 - 큰 회색 화면
 
-        <Button
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            app:ci_drawable="@drawable/black_radius"
+            app:ci_height="7dp"
+            app:ci_width="7dp"
+            app:ci_margin="4dp"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/mainbutton"
+            android:layout_height="25dp"/>
+
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/mainbutton"
+            android:layout_below="@+id/menu"
             android:layout_width="380dp"
             android:layout_height="230dp"
-            android:layout_below="@+id/menu"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/main_button"
-            android:gravity="left"
-            android:textColor="#ffff"
-            android:text="\n\n     음식이 없어요"
-            android:textSize="40dp"
-            android:fontFamily="@font/happy_mid"
-            android:textStyle="bold" />
+            android:layout_marginTop="16dp"/>
         //유튜브 버튼
 
         <ImageButton
@@ -55,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/mainbutton"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="25dp"
             android:adjustViewBounds="true"
             android:background="#FFFFFF"
             android:src="@drawable/youtubebut" />
@@ -68,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/mainbutton"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="22dp"
             android:layout_toRightOf="@+id/youtubebut"
             android:adjustViewBounds="true"
             android:background="#FFFFFF"
@@ -82,7 +85,7 @@
             android:layout_height="50dp"
             android:layout_below="@+id/youtubebut"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="80dp"
             android:layout_marginBottom="30dp"
             android:scaleType="fitXY"
             android:background="#FFFFFF"
