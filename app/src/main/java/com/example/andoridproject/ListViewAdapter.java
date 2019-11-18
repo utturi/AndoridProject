@@ -15,10 +15,12 @@ public class ListViewAdapter extends BaseAdapter
     LayoutInflater inflater = null;
     private ArrayList<ListViewItem> m_oData = null;
     private boolean mClick = false;
+    private CheckBox checkBoxs[];
 
     public ListViewAdapter(ArrayList<ListViewItem> _oData)
     {
         m_oData = _oData;
+        checkBoxs = new CheckBox[m_oData.size()];
     }
 
     @Override
@@ -55,20 +57,20 @@ public class ListViewAdapter extends BaseAdapter
 
         TextView oTextTitle = (TextView) convertView.findViewById(R.id.name);
         TextView oTextDate = (TextView) convertView.findViewById(R.id.date);
-        final CheckBox checkBox =  (CheckBox)convertView.findViewById(R.id.checkbox);
+        checkBoxs[position] =  (CheckBox)convertView.findViewById(R.id.checkbox);
         if(mClick) {
-            checkBox.setVisibility(View.VISIBLE);
+            checkBoxs[position].setVisibility(View.VISIBLE);
         } else {
-            checkBox.setVisibility(View.INVISIBLE);
+            checkBoxs[position].setVisibility(View.INVISIBLE);
         }
         oTextTitle.setText(m_oData.get(position).getName());
         oTextDate.setText(m_oData.get(position).getDate());
 
         //체크박스 작업
-        checkBox.setOnClickListener(new View.OnClickListener() {
+        checkBoxs[position].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkBox.isChecked())
+                if(checkBoxs[position].isChecked())
                 {
                     ListViewItem item1 = new ListViewItem();
                     item1 = m_oData.get(position);
@@ -96,6 +98,25 @@ public class ListViewAdapter extends BaseAdapter
 
         mClick = bClick;
         notifyDataSetChanged();
+    }
+    public void allCheckBox(boolean isAllCheked) {
+        if (isAllCheked) {
+            for (int i = 0; i < m_oData.size(); i++) {
+                checkBoxs[i].setChecked(false);
+                ListViewItem item1 = new ListViewItem();
+                item1 = m_oData.get(i);
+                item1.setSelected(false);
+                m_oData.set(i, item1);
+            }
+        } else {
+            for (int i = 0; i < m_oData.size(); i++) {
+                checkBoxs[i].setChecked(true);
+                ListViewItem item1 = new ListViewItem();
+                item1 = m_oData.get(i);
+                item1.setSelected(true);
+                m_oData.set(i, item1);
+            }
+        }
     }
 }
 
