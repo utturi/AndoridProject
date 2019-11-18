@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
                 Cursor cursor = db.rawQuery(sql, null);
                 if (cursor.getCount() != 0) {
                     cursor.moveToNext();
+                    for(int i = 0; i < viewPager.getCurrentItem();i++) {
+                        cursor.moveToNext();
+                    }
                     String name = cursor.getString(0);
                     String date = cursor.getString(1);
                     sql = "DELETE FROM FOOD WHERE name = '" + name + "' AND date = '" + date + "';";
