@@ -2,44 +2,59 @@ package com.example.andoridproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
+
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     ImageButton directbut;      //직접등록버튼
     DatePickerDialog mDialog;   //달력사용
     String TAG = "FoodName";    //직접등록 다이얼로그
     String name;                //음식이름
     ImageButton youtube_but;    //유튜브 버튼
-    ImageButton soundbut;       //사운드 버튼
     ImageButton layer[];        //gage배열
 
     private ViewPager viewPager ;           //뷰페이저
@@ -52,8 +67,12 @@ public class MainActivity extends AppCompatActivity {
     private View drawerView;           //Navigation Drawer View
 
     //의현
-    private static final int REQUEST_CODE = 1234;
-    ArrayList<String> matches_text;
+    private static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
+    private SpeechRecognizer speechRecog;
+    ImageButton customDialogBtn;
+    AlertDialog customDialog;
+    ImageView gv;
+    ImageView but;
     //의현
 
     @Override
@@ -102,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         // Youtube 버튼
         youtube_but = findViewById(R.id.youtubebut);
         youtube_but.setOnClickListener(new View.OnClickListener(){
@@ -135,25 +155,53 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //의현 - 음성등록
-        soundbut = findViewById(R.id.soundbutton);
 
-        soundbut.setOnClickListener(new View.OnClickListener() {
+        //의현
+        gv = findViewById(R.id.soundbutton);
+        customDialogBtn = findViewById(R.id.soundbutton);
+        customDialogBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if (isConnected()) {
-                    Toast.makeText(getApplicationContext(),"음식이름 기한날짜 순으로 말해주세요!\nex) 돼지갈비 2019년 11월 12일",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                    intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"음식이름 날짜 순으로 입력하세요~");
-                    startActivityForResult(intent, REQUEST_CODE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View customDialogView = inflater.inflate(R.layout.dialog, null);
+                but = customDialogView.findViewById(R.id.but);
+                GlideDrawableImageViewTarget gif = new GlideDrawableImageViewTarget(but);
+                Glide.with(MainActivity.this).load(R.drawable.soundview).into(gif);
+                builder.setView(customDialogView);
+
+                customDialog = builder.create();
+                customDialog.show();
+
+                //다이얼로그 화면 조정
+                ViewGroup.LayoutParams params = customDialog.getWindow().getAttributes();
+                ((WindowManager.LayoutParams) params).x=0;
+                ((WindowManager.LayoutParams) params).y=0;
+                params.width=800;
+                params.height=500;
+                customDialog.getWindow().setAttributes((WindowManager.LayoutParams) params);
+
+                //음성인식
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.RECORD_AUDIO)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                            Manifest.permission.RECORD_AUDIO)) {
+                    } else {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
+                    }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Plese Connect to Internet", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
+                    intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+                    speechRecog.startListening(intent);
                 }
             }
-
         });
+        initializeSpeechRecognizer();
         //의현
 
         //직접등록버튼 입력 -> 달력(유통기한설정)
@@ -252,64 +300,95 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+//의현
+    private void initializeSpeechRecognizer() {
+        if (SpeechRecognizer.isRecognitionAvailable(this)) {
+            speechRecog = SpeechRecognizer.createSpeechRecognizer(this);
+            speechRecog.setRecognitionListener(new RecognitionListener() {
+                @Override
+                public void onReadyForSpeech(Bundle params) { }
 
-    //의현
-    public boolean isConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo net = cm.getActiveNetworkInfo();
-        if (net != null && net.isAvailable() && net.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data1) {
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            matches_text = data1
-                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            String text = matches_text.get(0).replace(" ", "");
-            String name = "", data = "";
-            String[] final_arr;
-            for (int i = 0; i < text.length(); i++) {
-                if (text.charAt(i) >= '0' && text.charAt(i) <= '9') {
-                    data = text.substring(i, text.length() - 1);
-                    i = text.length() - 1;
-                } else { //음식이름
-                    name += text.charAt(i);
+                @Override
+                public void onBeginningOfSpeech() {
+                    Toast.makeText(MainActivity.this, "입력 중...", Toast.LENGTH_SHORT).show();
                 }
-            }
-            data = data.replace("년", "-");
-            data = data.replace("월", "-");
-            String[] temp_data = data.split("-");
-            String date = ""; //최종 년-월-일
 
-            if (name == "" || data == "")
-                Toast.makeText(getApplicationContext(), "입력이 잘못되었습니다.", Toast.LENGTH_LONG).show();
-            else {
-                if ((Integer.parseInt(temp_data[0]) >= 2019) && (Integer.parseInt(temp_data[0]) < 2050)) {
-                    if (Integer.parseInt(temp_data[1]) < 13) {
-                        if (Integer.parseInt(temp_data[2]) < 32) {
-                            if (Integer.parseInt(temp_data[1]) < 10)
-                                temp_data[1] = "0" + temp_data[1]; //월
-                            if (Integer.parseInt(temp_data[2]) < 10)
-                                temp_data[2] = "0" + temp_data[2]; //일
-                            date = temp_data[0] + "-" + temp_data[1] + "-" + temp_data[2];
-                            final_arr = new String[]{name, date};
-                            insertDB(final_arr);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "요일이 되었습니다.", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onRmsChanged(float rmsdB) {
+                }
+
+                @Override
+                public void onBufferReceived(byte[] buffer) {
+                    Toast.makeText(MainActivity.this, "입력 완료", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onEndOfSpeech() {
+                    customDialog.dismiss();
+                }
+
+                @Override
+                public void onError(int error) {
+                }
+
+                @Override
+                public void onResults(Bundle results) {
+                    List<String> result_arr = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                    String[] arry = result_arr.toArray(new String[result_arr.size()]);
+                    //Toast.makeText(getApplicationContext(), arry[0], Toast.LENGTH_SHORT).show();
+
+                    String text = arry[0].replaceAll(" ", "");
+                    String name = "", data = "";
+                    String[] final_arr;
+                    for (int i = 0; i < text.length(); i++) {
+                        if (text.charAt(i) >= '0' && text.charAt(i) <= '9') {
+                            data = text.substring(i, text.length() - 1);
+                            i = text.length() - 1;
+                        } else { //음식이름
+                            name += text.charAt(i);
                         }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "월이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "년도가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                    data = data.replace("년", "-");
+                    data = data.replace("월", "-");
+                    //Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
+                    String[] temp_data = data.split("-");
+                    String date = ""; //최종 년-월-일
+
+                    if (name == "" || data == "")
+                        Toast.makeText(getApplicationContext(), "입력이 잘못되었습니다.", Toast.LENGTH_LONG).show();
+                    else {
+                        if ((Integer.parseInt(temp_data[0]) >= 2019) && (Integer.parseInt(temp_data[0]) < 2050)) {
+                            if (Integer.parseInt(temp_data[1]) < 13) {
+                                if (Integer.parseInt(temp_data[2]) < 32) {
+                                    if (Integer.parseInt(temp_data[1]) < 10)
+                                        temp_data[1] = "0" + temp_data[1]; //월
+                                    if (Integer.parseInt(temp_data[2]) < 10)
+                                        temp_data[2] = "0" + temp_data[2]; //일
+                                    date = temp_data[0] + "-" + temp_data[1] + "-" + temp_data[2];
+                                    final_arr = new String[]{name, date};
+                                    insertDB(final_arr);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "요일이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                                    customDialog.dismiss();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "월이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                                customDialog.dismiss();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "년도가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                            customDialog.dismiss();
+                        }
+                    }
                 }
-            }
+
+                @Override
+                public void onPartialResults(Bundle partialResults) { }
+
+                @Override
+                public void onEvent(int eventType, Bundle params) { }
+            });
         }
-        super.onActivityResult(requestCode, resultCode, data1);
     }
     //의현
 

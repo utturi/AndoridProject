@@ -27,11 +27,6 @@
             android:background="@drawable/ic_menu_black_24dp"
             android:scaleType="fitCenter" />
 
-        <!--<DatePicker
-            android:id="@+id/dataPicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    -->
         //메인화면 - 큰 회색 화면
 
         <me.relex.circleindicator.CircleIndicator
