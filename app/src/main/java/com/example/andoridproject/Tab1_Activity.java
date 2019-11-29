@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,6 +38,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,12 +53,10 @@ import java.util.List;
 import me.relex.circleindicator.CircleIndicator;
 
 public class Tab1_Activity extends AppCompatActivity {
-    ImageButton directbut;      //직접등록버튼
     DatePickerDialog mDialog;   //달력사용
     String TAG = "FoodName";    //직접등록 다이얼로그
     String name;                //음식이름
     ImageButton youtube_but;    //유튜브 버튼
-    ImageButton soundbut;       //사운드 버튼
     ImageButton layer[];        //gage배열
 
     private ViewPager viewPager;           //뷰페이저
@@ -73,14 +74,50 @@ public class Tab1_Activity extends AppCompatActivity {
     private SpeechRecognizer speechRecog;
     ImageButton customDialogBtn;
     AlertDialog customDialog;
-    ImageView gv;
     ImageView but;
+
+    FloatingActionButton fab_plus,fab_sound,fab_direct;
+    Animation FabOpen,FabClose,FabRClockwise,FabRanticlockwise;
+    boolean isOpen = false;
     //의현
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab1);
+        //의현
+        fab_plus = (FloatingActionButton)findViewById(R.id.fab_plus);
+        fab_sound = (FloatingActionButton)findViewById(R.id.fab_sound); //음성등록
+        fab_direct = (FloatingActionButton)findViewById(R.id.fab_direct); //직접등록
+        FabOpen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
+        FabClose = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
+        FabRClockwise = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
+        FabRanticlockwise = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
+        fab_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isOpen)
+                {
+                    fab_direct.startAnimation(FabClose);
+                    fab_sound.startAnimation(FabClose);
+                    fab_plus.startAnimation(FabRanticlockwise);
+                    fab_sound.setClickable(false);
+                    fab_direct.setClickable(false);
+                    isOpen = false;
+                }
+                else
+                {
+                    fab_direct.startAnimation(FabOpen);
+                    fab_sound.startAnimation(FabOpen);
+                    fab_plus.startAnimation(FabRClockwise);
+                    fab_sound.setClickable(true);
+                    fab_direct.setClickable(true);
+                    isOpen = true;
+                }
+            }
+        });
+        //의현
+
         CONTEXT = this;
         listView=findViewById(R.id.tab1_listview);
         //setList();
@@ -154,10 +191,9 @@ public class Tab1_Activity extends AppCompatActivity {
             }
         });
 
-        /*
         //의현
-        gv = findViewById(R.id.soundbutton);
-        customDialogBtn = findViewById(R.id.soundbutton);
+        //gv = findViewById(R.id.soundbutton);
+        customDialogBtn = findViewById(R.id.fab_sound);
         customDialogBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -197,8 +233,7 @@ public class Tab1_Activity extends AppCompatActivity {
         //의현
 
         //직접등록버튼 입력 -> 달력(유통기한설정)
-        directbut = findViewById(R.id.directbutton);
-        directbut.setOnClickListener(new View.OnClickListener() {
+        fab_direct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder ad = new AlertDialog.Builder(Tab1_Activity.this);
@@ -234,19 +269,15 @@ public class Tab1_Activity extends AppCompatActivity {
                 ad.show();
             }
         });
-
         // DatePickerDialog
         mDialog = new DatePickerDialog(this, listener, 2019, 11, 8);
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.appbar, menu) ;
-
         return true ;
-
-         */
-    }
+    }*/
     public void setList()
     {
        DatabaseReference database = FirebaseDatabase.getInstance().getReference("posts");
@@ -376,9 +407,9 @@ public class Tab1_Activity extends AppCompatActivity {
             }
             if (monthOfYear < 10)
                 month = "0" + monthOfYear;
-            String date = year + "-" + month + "-" + day;
-            String[] arr = new String[]{name, date};
-            insertDB(arr);
+                String date = year + "-" + month + "-" + day;
+                String[] arr = new String[]{name, date};
+                insertDB(arr);
         }
     };
 
@@ -391,7 +422,7 @@ public class Tab1_Activity extends AppCompatActivity {
         cursor.moveToNext();
         Toast.makeText(getApplicationContext(), "음식이 등록되었습니다~", Toast.LENGTH_SHORT).show();
         db.close();
-        setGage();
+        //setGage();
         setMainbut();
     }
 
