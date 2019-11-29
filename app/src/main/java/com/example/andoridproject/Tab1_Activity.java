@@ -24,8 +24,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -34,6 +36,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,10 +58,12 @@ public class Tab1_Activity extends AppCompatActivity {
     ImageButton soundbut;       //사운드 버튼
     ImageButton layer[];        //gage배열
 
-    private ViewPager viewPager ;           //뷰페이저
-    private MainPagerAdapter pagerAdapter ; //어댑터
+    private ViewPager viewPager;           //뷰페이저
+    private MainPagerAdapter pagerAdapter; //어댑터
     private CircleIndicator indicator;      //인디케이터
-
+    private ArrayList<Board> items;
+    private Tab1BoardAdapter adapter;
+    private ListView listView;
     //대호
     public static Context CONTEXT;
     private BackPressCloseHandler backPressCloseHandler; // 2번 뒤로가기 종료
@@ -73,6 +82,9 @@ public class Tab1_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab1);
         CONTEXT = this;
+        listView=findViewById(R.id.tab1_listview);
+        //setList();
+        /*
         layer = new ImageButton[10];
         layer[0] = findViewById(R.id.layer1);
         layer[1] = findViewById(R.id.layer2);
@@ -85,15 +97,14 @@ public class Tab1_Activity extends AppCompatActivity {
         layer[8] = findViewById(R.id.layer9);
         layer[9] = findViewById(R.id.layer10);
 
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(tb);
+         */
 
         //ViewPager
         indicator = (CircleIndicator) findViewById(R.id.indicator);
         viewPager = (ViewPager) findViewById(R.id.mainbutton) ;
         ImageButton eat_button = findViewById(R.id.eatbut);
         setMainbut();
-        setGage();
+        //setGage();
         eat_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,6 +154,7 @@ public class Tab1_Activity extends AppCompatActivity {
             }
         });
 
+        /*
         //의현
         gv = findViewById(R.id.soundbutton);
         customDialogBtn = findViewById(R.id.soundbutton);
@@ -159,14 +171,7 @@ public class Tab1_Activity extends AppCompatActivity {
 
                 customDialog = builder.create();
                 customDialog.show();
-/*
-                //다이얼로그 화면 조정
-                ViewGroup.LayoutParams params = customDialog.getWindow().getAttributes();
-                ((WindowManager.LayoutParams) params).x=0;
-                ((WindowManager.LayoutParams) params).y=0;
-                params.width=800;
-                params.height=500;
-*/
+
 
                 //음성인식
                 if (ContextCompat.checkSelfPermission(Tab1_Activity.this,
@@ -239,8 +244,34 @@ public class Tab1_Activity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.appbar, menu) ;
 
         return true ;
-    }
 
+         */
+    }
+    public void setList()
+    {
+       DatabaseReference database = FirebaseDatabase.getInstance().getReference("posts");
+       items = new ArrayList<>();
+       items.clear();
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot messageData : dataSnapshot.getChildren())
+                {
+                    String key = messageData.getKey();
+                    Board data = messageData.getValue(Board.class);
+                    data.setKey(key);
+                    items.add(data);
+                }
+                adapter = new Tab1BoardAdapter(items,getApplicationContext());
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     //의현
     private void initializeSpeechRecognizer() {
         if (SpeechRecognizer.isRecognitionAvailable(this)) {
@@ -369,7 +400,8 @@ public class Tab1_Activity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         setMainbut();
-        setGage();
+        setList();
+        //setGage();
     }
 
     // MainButton 구성

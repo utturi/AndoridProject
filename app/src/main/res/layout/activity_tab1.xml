@@ -2,27 +2,22 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:fitsSystemWindows="true">
 
-    <androidx.appcompat.widget.Toolbar
+    <TextView
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!--<TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="홈"
-            android:textSize="25dp"
-            android:textColor="@color/colorPrimary"/>-->
-
-    </androidx.appcompat.widget.Toolbar>
-
+        android:textColor="#748A9D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:text="Home"
+        android:textSize="30dp"
+        android:fontFamily="@font/dream_mid"
+        android:textStyle="bold"/>
     <View
         android:id="@+id/toolLine"
         android:layout_width="match_parent"
@@ -43,8 +38,8 @@
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/indicator"
         app:ci_drawable="@drawable/black_radius"
-        app:ci_height="7dp"
-        app:ci_width="7dp"
+        app:ci_height="5dp"
+        app:ci_width="5dp"
         app:ci_margin="4dp"
         android:layout_width="match_parent"
         android:layout_below="@+id/mainbutton"
@@ -62,7 +57,7 @@
         android:layout_marginTop="25dp"
         android:adjustViewBounds="true"
         android:background="#FFFFFF"
-        android:src="@drawable/youtubebut" />
+        android:src="@drawable/icon_delete" />
 
     //먹었다 버튼
 
@@ -77,9 +72,35 @@
         android:layout_marginTop="25dp"
         android:adjustViewBounds="true"
         android:background="#FFFFFF"
-        android:src="@drawable/black_radius" />
+        android:src="@drawable/icon_home_on" />
 
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/icon_addtion"/>
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/eatbut"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="게시판"
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/dream_mid"/>
+        <ListView
+            android:id="@+id/tab1_listview"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="400dp"
+            android:layout_height="230dp"/>
+    </LinearLayout>
     <!--<LinearLayout
         android:id="@+id/communiti"
         android:layout_width="match_parent"
@@ -144,6 +165,7 @@
         </LinearLayout>
     </LinearLayout>-->
 
+    <!--
     //직접등록버튼
 
     <ImageButton
@@ -171,6 +193,8 @@
         android:background="#FFFFFF"
         android:src="@drawable/soundbutton" />
 
+    -->
+    <!--
     <LinearLayout
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -234,4 +258,5 @@
 
     </LinearLayout>
 
+-->
 </RelativeLayout>

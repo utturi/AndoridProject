@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.ch9_popup_menu.Popupmenu">
+
+    <item android:id="@+id/popup_edit"
+        android:title="edit" />
+
+    <item android:id="@+id/popup_delete"
+
+        android:title="Delete"/>
+
+
+</menu>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.andoridproject">
-    <!--<uses-permission android:name="android.permission.INTERNET" />
+    <!--
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    --><uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +14,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Message"></activity>
+        <activity android:name=".PostDetailActivity" />
+        <activity android:name=".PostActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".PasswordResetActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity" />
         <activity
+            android:name=".SplashActivity"
             android:screenOrientation="portrait"
-            android:name=".MainActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,14 +32,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name=".SubmainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Tab1_Activity"/>
-        <activity android:name=".Tab2_Activity"/>
-        <activity android:name=".Tab3_Activity"/>
-        <activity android:name=".Tab4_Activity"/>
-        <activity android:name=".Tab5_Activity"/>
+        <activity android:name=".Tab1_Activity" />
+        <activity android:name=".Tab2_Activity" />
+        <activity android:name=".Tab3_Activity" />
+        <activity android:name=".Tab4_Activity" />
+        <activity android:name=".Tab5_Activity" />
     </application>
 
 </manifest>

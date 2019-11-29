@@ -2,5 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tab4_title"
+        android:textColor="#748A9D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:text="Alert"
+        android:textSize="30dp"
+        android:fontFamily="@font/dream_mid"
+        android:textStyle="bold"/>
+    <View
+        android:id="@+id/toolLine"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/tab4_title"
+        android:background="@color/divider"/>
 
 </LinearLayout>

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends TabActivity {
     private BackPressCloseHandler backPressCloseHandler;
 
@@ -13,6 +15,8 @@ public class MainActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(FirebaseAuth.getInstance().getCurrentUser()==null)
+            startLoginActivity();
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 //        tabHost = (TabHost)findViewById(R.id.tabhost);
@@ -65,5 +69,11 @@ public class MainActivity extends TabActivity {
     @Override public void onBackPressed() {
         //super.onBackPressed();
         backPressCloseHandler.onBackPressed();
+    }
+    private void startLoginActivity()
+    {
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
