@@ -1,188 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?><!--네비게이션 드로어-->
-<androidx.drawerlayout.widget.DrawerLayout
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity" >
-<!--    tools:openDrawer="start"-->
+    tools:context=".MainActivity">
 
-    <RelativeLayout
+    <TabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF">
-
-        //메뉴버튼
-
-        <Button
-            android:id="@+id/menu"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/ic_menu_black_24dp"
-            android:scaleType="fitCenter" />
-
-        //메인화면 - 큰 회색 화면
-
-        <me.relex.circleindicator.CircleIndicator
-            android:id="@+id/indicator"
-            app:ci_drawable="@drawable/black_radius"
-            app:ci_height="7dp"
-            app:ci_width="7dp"
-            app:ci_margin="4dp"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/mainbutton"
-            android:layout_height="25dp"/>
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/mainbutton"
-            android:layout_below="@+id/menu"
-            android:layout_width="380dp"
-            android:layout_height="230dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"/>
-
-        //유튜브 버튼
-
-        <ImageButton
-            android:id="@+id/youtubebut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mainbutton"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="25dp"
-            android:adjustViewBounds="true"
-            android:background="#FFFFFF"
-            android:src="@drawable/youtubebut" />
-
-        //먹었다 버튼
-
-        <ImageButton
-            android:id="@+id/eatBut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/mainbutton"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="22dp"
-            android:layout_toRightOf="@+id/youtubebut"
-            android:adjustViewBounds="true"
-            android:background="#FFFFFF"
-            android:src="@drawable/eatbut" />
-
-        //커뮤니티 버튼
-
-        <ImageButton
-            android:id="@+id/communite"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/youtubebut"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="30dp"
-            android:scaleType="fitXY"
-            android:background="#FFFFFF"
-            android:src="@drawable/communiti" />
-
-        //직접등록버튼
-
-        <ImageButton
-            android:id="@+id/directbutton"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:scaleType="fitXY"
-            android:layout_marginLeft="32dp"
-            android:layout_marginBottom="30dp"
-            android:layout_below="@+id/communite"
-            android:background="#FFFFFF"
-            android:src="@drawable/directbutton" />
-
-        //음성등록버튼
-
-        <ImageButton
-            android:id="@+id/soundbutton"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginBottom="30dp"
-            android:scaleType="fitXY"
-            android:layout_below="@+id/directbutton"
-            android:background="#FFFFFF"
-            android:src="@drawable/soundbutton" />
+        android:layout_height="match_parent" >
 
         <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="250dp"
-            android:layout_toRightOf="@+id/communite"
-            android:layout_below="@+id/eatBut"
-            android:layout_marginLeft="95dp"
-            android:layout_marginTop="70dp"
-            android:orientation="vertical"
-            android:gravity="bottom">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/layer10"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="@drawable/nomal_top"/>
-            <ImageButton
-                android:id="@+id/layer9"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer8"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer7"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer6"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer5"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer4"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer3"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer2"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="#cccc"/>
-            <ImageButton
-                android:id="@+id/layer1"
-                android:layout_width="120dp"
-                android:layout_height="23dp"
-                android:background="@drawable/nomal_bottom"/>
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <!-- Tab1 content -->
+                <LinearLayout
+                    android:id="@+id/content1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <!-- Tab2 content -->
+                <LinearLayout
+                    android:id="@+id/content2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                </LinearLayout>
+
+                <!-- Tab3 content -->
+                <LinearLayout
+                    android:id="@+id/content3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                </LinearLayout>
+
+                <!-- Tab4 content -->
+                <LinearLayout
+                    android:id="@+id/content4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                </LinearLayout>
+
+                <!-- Tab5 content -->
+                <LinearLayout
+                    android:id="@+id/content5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
-    </RelativeLayout>
+    </TabHost>
 
-    <com.google.android.material.navigation.NavigationView
-        android:layout_gravity="start"
-        android:id="@+id/nav_view"
-        app:headerLayout="@layout/navagation_header"
-        app:menu="@menu/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</RelativeLayout>

@@ -14,18 +14,23 @@
         android:theme="@style/AppTheme">
         <activity
             android:screenOrientation="portrait"
-            android:name=".SubmainActivity"
-            android:theme="@style/MyTheme" />
-        <activity
-            android:screenOrientation="portrait"
             android:name=".MainActivity"
-            android:theme="@style/MyTheme">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".SubmainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Tab1_Activity"/>
+        <activity android:name=".Tab2_Activity"/>
+        <activity android:name=".Tab3_Activity"/>
+        <activity android:name=".Tab4_Activity"/>
+        <activity android:name=".Tab5_Activity"/>
     </application>
 
 </manifest>

@@ -116,7 +116,7 @@ public class SubmainActivity extends AppCompatActivity {
                                     ListViewItem item = (ListViewItem) listViewAdapter.getItem(delete_point);
                                     String sql = "DELETE FROM FOOD WHERE name = '" + item.getName() + "' AND date = '" + item.getDate() + "';";
                                     db.execSQL(sql);
-                                    ((MainActivity) MainActivity.CONTEXT).onResume();
+                                    ((Tab1_Activity) Tab1_Activity.CONTEXT).onResume();
                                     Intent intent = getIntent();
                                     finish();
                                     startActivity(intent);
@@ -149,7 +149,7 @@ public class SubmainActivity extends AppCompatActivity {
                             ListViewItem item = (ListViewItem) listViewAdapter.getItem(delete_point);
                             String sql = "UPDATE FOOD SET date = '"+date+"' WHERE name = '" + item.getName() + "' AND date = '" + item.getDate() + "';";
                             db.execSQL(sql);
-                            ((MainActivity) MainActivity.CONTEXT).onResume();
+                            ((Tab1_Activity) Tab1_Activity.CONTEXT).onResume();
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);
@@ -200,7 +200,7 @@ public class SubmainActivity extends AppCompatActivity {
                 if (delete_count == 0)
                     Toast.makeText(getApplicationContext(), "삭제할 목록이 없어요..", Toast.LENGTH_SHORT).show();
                 else {
-                    ((MainActivity) MainActivity.CONTEXT).onResume();
+                    ((Tab1_Activity) Tab1_Activity.CONTEXT).onResume();
                     Intent intent = getIntent();
                     finish();
                     startActivity(intent);
