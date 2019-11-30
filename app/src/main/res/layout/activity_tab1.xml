@@ -131,6 +131,7 @@
 
         <ListView
             android:id="@+id/tab1_listview"
+            android:listSelector="@android:color/transparent"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_width="370dp"

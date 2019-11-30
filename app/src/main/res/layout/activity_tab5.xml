@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/setting"
         android:textColor="#748A9D"
@@ -18,6 +19,7 @@
         android:layout_height="0.5dp"
         android:layout_below="@id/setting"
         android:background="@color/divider"/>
+
     <Button
         android:id="@+id/logout"
         android:layout_width="wrap_content"

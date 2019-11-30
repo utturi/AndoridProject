@@ -14,15 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Message"></activity>
-        <activity android:name=".PostDetailActivity" />
-        <activity android:name=".PostActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".PasswordResetActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".Activity.MessageActivity"></activity>
+        <activity android:name=".Activity.PostDetailActivity" />
+        <activity android:name=".Activity.PostActivity" />
+        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.PasswordResetActivity" />
+        <activity android:name=".Activity.SignUpActivity" />
+        <activity android:name=".Activity.LoginActivity" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -32,14 +32,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SubmainActivity"
+            android:name=".Activity.SubmainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Tab1_Activity" />
-        <activity android:name=".Tab2_Activity" />
-        <activity android:name=".Tab3_Activity" />
-        <activity android:name=".Tab4_Activity" />
-        <activity android:name=".Tab5_Activity" />
+        <activity android:name=".Tab.Tab1_Activity" />
+        <activity android:name=".Tab.Tab2_Activity" />
+        <activity android:name=".Tab.Tab3_Activity" />
+        <activity android:name=".Tab.Tab4_Activity" />
+        <activity android:name=".Tab.Tab5_Activity" />
     </application>
 
 </manifest>
