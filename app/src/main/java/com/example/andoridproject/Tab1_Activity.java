@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -18,7 +16,6 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -31,7 +28,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
@@ -85,6 +81,9 @@ public class Tab1_Activity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab1);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
+
         //의현
         fab_plus = (FloatingActionButton)findViewById(R.id.fab_plus);
         fab_sound = (FloatingActionButton)findViewById(R.id.fab_sound); //음성등록
@@ -520,5 +519,11 @@ public class Tab1_Activity extends AppCompatActivity {
             }
         }
         db.close();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        backPressCloseHandler.onBackPressed();
     }
 }

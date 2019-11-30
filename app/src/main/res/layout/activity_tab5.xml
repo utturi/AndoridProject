@@ -7,11 +7,10 @@
         android:textColor="#748A9D"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="10dp"
+        android:padding="10dp"
         android:text="Setting"
         android:textSize="30dp"
-        android:fontFamily="@font/dream_mid"
         android:textStyle="bold"/>
     <View
         android:id="@+id/toolLine"
