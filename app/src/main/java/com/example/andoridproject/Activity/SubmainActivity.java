@@ -243,11 +243,9 @@ public class SubmainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.app_bar_check:
                 allCheck();
-                Toast.makeText(this, "체크클릭", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.app_bar_delete:
                 deleteFood();
-                Toast.makeText(this, "삭제클릭", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
