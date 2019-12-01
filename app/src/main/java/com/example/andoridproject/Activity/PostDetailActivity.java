@@ -48,7 +48,7 @@ public class PostDetailActivity extends AppCompatActivity {
     CommentAdapter adapter;
     ListView listView;
     EditText edittext;
-    MaterialButton popup;
+    ImageView popup;
     MaterialButton button;
     TextView contents;
     TextView title;

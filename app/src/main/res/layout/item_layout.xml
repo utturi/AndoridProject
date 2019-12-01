@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="360dp"
-    android:layout_height="140dp"
+    android:layout_height="100dp"
     android:layout_marginLeft="23dp"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="30dp"
@@ -13,9 +13,9 @@
         android:layout_marginTop="20dp"
         android:text="name"
         android:fontFamily="@font/happy_mid"
-        android:textSize="35dp"
+        android:textSize="25dp"
         android:textStyle="bold"
-        android:textColor="#ffff"
+        android:textColor="#748A9D"
         android:layout_centerHorizontal="true"/>
     <CheckBox
         android:id="@+id/checkbox"
@@ -26,7 +26,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:backgroundTint="#ffff"
-        android:buttonTint="#ffff"
+        android:buttonTint="#748A9D"
         android:layout_marginLeft="15dp"/>
     <TextView
         android:id="@+id/date"
@@ -35,9 +35,9 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/dream_mid"
         android:text="date"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_below="@+id/name"
-        android:textColor="#ffff"
+        android:textColor="#748A9D"
         android:layout_centerHorizontal="true"/>
     <TextView
         android:layout_width="360dp"

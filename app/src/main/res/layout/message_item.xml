@@ -16,7 +16,7 @@
             android:textSize="20dp"
             android:fontFamily="@font/happy_mid"
             android:layout_marginTop="12dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="15dp"/>
         <TextView
             android:id="@+id/message_item_title"
             android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
             android:text="text"
             android:textSize="15dp"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="15dp"/>
 
     </LinearLayout>
     <TextView
@@ -35,12 +35,12 @@
         android:textSize="15dp"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="6dp"/>
+        android:layout_marginRight="15dp"/>
     <ImageView
         android:id="@+id/message_item_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:src="@drawable/ic_action_account_circle_40"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"/>

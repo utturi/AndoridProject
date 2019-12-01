@@ -10,16 +10,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -29,6 +28,8 @@ import com.example.andoridproject.Adapter.ListViewAdapter;
 import com.example.andoridproject.Etc.DBHelper;
 import com.example.andoridproject.Item.ListViewItem;
 import com.example.andoridproject.R;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -36,12 +37,11 @@ public class SubmainActivity extends AppCompatActivity {
     ArrayList<ListViewItem> items = new ArrayList<ListViewItem>();
     boolean mclick = false;
     boolean check_state = false; //전체선택 버튼 상태를 나타내는 변수
-    Button execute_delete;
-    Button all_check;
     SwipeMenuListView listView;
     int delete_point;           //position을 리스너에서 사용하기위한 전역변수
     Context context;
     DatePickerDialog dateDialog;
+    ListViewAdapter listViewAdapter;
 
 
     @Override
@@ -49,10 +49,7 @@ public class SubmainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_main);
         context = this;
-        TextView textView = findViewById(R.id.textview);
         listView = findViewById(R.id.listview);
-        execute_delete = (Button) findViewById(R.id.execute_delete);
-        all_check = (Button) findViewById(R.id.execute_allcheck);
         AnimationSet set = new AnimationSet(true);
 
         Animation rtl = new TranslateAnimation(
@@ -62,13 +59,16 @@ public class SubmainActivity extends AppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0);
         rtl.setDuration(400);
         set.addAnimation(rtl);
-
         Animation alpha = new AlphaAnimation(0, 1);
         alpha.setDuration(400);
         set.addAnimation(alpha);
 
         LayoutAnimationController controller = new LayoutAnimationController(set, 0.5f);
         listView.setLayoutAnimation(controller);
+
+
+        BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
+        setSupportActionBar(bottomAppBar);
 
         //DB에서 데이터 추출
         DBHelper helper = new DBHelper(this);
@@ -82,9 +82,8 @@ public class SubmainActivity extends AppCompatActivity {
             ListViewItem item = new ListViewItem(name, date);
             items.add(item);
         }
-        textView.setText("저장된 목록  " + cursor.getCount() + "개");
         db.close();
-        final ListViewAdapter listViewAdapter = new ListViewAdapter(items);
+        listViewAdapter = new ListViewAdapter(items);
         listView.setAdapter(listViewAdapter);
         listView.setMenuCreator(creator);
         listView.setOnSwipeListener(new SwipeMenuListView.OnSwipeListener() {
@@ -166,67 +165,21 @@ public class SubmainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        ImageButton imagebutton = findViewById(R.id.deleteButton);
-        imagebutton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton sub_button = findViewById(R.id.sub_button);
+        sub_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mclick == false) {
                     mclick = true;
-                    execute_delete.setVisibility(View.VISIBLE);
-                    all_check.setVisibility(View.VISIBLE);
+                    invalidateOptionsMenu();
                     listViewAdapter.toggleCheckBox(mclick);
                 } else {
                     mclick = false;
-                    execute_delete.setVisibility(View.INVISIBLE);
-                    all_check.setVisibility(View.INVISIBLE);
+                    invalidateOptionsMenu();
                     listViewAdapter.toggleCheckBox(mclick);
                 }
             }
         });
-
-        execute_delete.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                int count = listViewAdapter.getCount();
-                int delete_count = 0;
-                ListViewItem item = new ListViewItem();
-                DBHelper helper = new DBHelper(getApplicationContext());
-                SQLiteDatabase db = helper.getWritableDatabase();
-                for (int i = 0; i < count; i++) {
-                    item = (ListViewItem) listViewAdapter.getItem(i);
-                    if (item.getSelected()) {
-                        String sql = "DELETE FROM FOOD WHERE name = '" + item.getName() + "' AND date = '" + item.getDate() + "';";
-                        db.execSQL(sql);
-                        delete_count++;
-                    }
-                }
-                db.close();
-                if (delete_count == 0)
-                    Toast.makeText(getApplicationContext(), "삭제할 목록이 없어요..", Toast.LENGTH_SHORT).show();
-                else {
-                    //((Tab1_Activity) Tab1_Activity.CONTEXT).onResume();
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
-                }
-            }
-        });
-
-        all_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!(check_state))//전체체크가 안됐으면
-                {
-                    listViewAdapter.allCheckBox(false);
-                    check_state = true;
-                } else {
-                    listViewAdapter.allCheckBox(true);
-                    check_state = false;
-                }
-            }
-        });
-
     }
 
     SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -241,7 +194,7 @@ public class SubmainActivity extends AppCompatActivity {
             // set item width
             openItem.setWidth(200);
             // set item title
-            openItem.setTitle("Edit");
+            openItem.setIcon(R.drawable.sub_edit);
             // set item title fontsize
             openItem.setTitleSize(18);
             // set item title font color
@@ -257,7 +210,7 @@ public class SubmainActivity extends AppCompatActivity {
             // set item width
             deleteItem.setWidth(200);
             // set item title
-            deleteItem.setTitle("Delete");
+            deleteItem.setIcon(R.drawable.sub_delete);
             // set item title fontsize
             deleteItem.setTitleSize(18);
             // set item title font color
@@ -268,6 +221,72 @@ public class SubmainActivity extends AppCompatActivity {
     };
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sub_menu, menu);
+        MenuItem delete = menu.findItem(R.id.app_bar_delete);
+        MenuItem check = menu.findItem(R.id.app_bar_check);
+        if(mclick==true)
+        {
+            delete.setVisible(true);
+            check.setVisible(true);
+        }
+        else
+        {
+            delete.setVisible(false);
+            check.setVisible(false);
+        }
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_bar_check:
+                allCheck();
+                Toast.makeText(this, "체크클릭", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.app_bar_delete:
+                deleteFood();
+                Toast.makeText(this, "삭제클릭", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteFood()
+    {
+        int count = listViewAdapter.getCount();
+        int delete_count = 0;
+        ListViewItem item = new ListViewItem();
+        DBHelper helper = new DBHelper(getApplicationContext());
+        SQLiteDatabase db = helper.getWritableDatabase();
+        for (int i = 0; i < count; i++) {
+            item = (ListViewItem) listViewAdapter.getItem(i);
+            if (item.getSelected()) {
+                String sql = "DELETE FROM FOOD WHERE name = '" + item.getName() + "' AND date = '" + item.getDate() + "';";
+                db.execSQL(sql);
+                delete_count++;
+            }
+        }
+        db.close();
+        if (delete_count == 0)
+            Toast.makeText(getApplicationContext(), "삭제할 목록이 없어요..", Toast.LENGTH_SHORT).show();
+        else {
+            //((Tab1_Activity) Tab1_Activity.CONTEXT).onResume();
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
+    public void allCheck()
+    {
+        if (!(check_state))//전체체크가 안됐으면
+        {
+            listViewAdapter.allCheckBox(false);
+            check_state = true;
+        } else {
+            listViewAdapter.allCheckBox(true);
+            check_state = false;
+        }
+    }
 }
-
-

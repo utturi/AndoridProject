@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="title"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:textStyle="bold"
