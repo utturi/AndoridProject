@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -16,12 +18,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.andoridproject.Adapter.CommentAdapter;
+import com.example.andoridproject.Etc.DBHelper2;
 import com.example.andoridproject.Item.Board;
 import com.example.andoridproject.Item.Comment;
 import com.example.andoridproject.R;
@@ -49,7 +53,9 @@ public class PostDetailActivity extends AppCompatActivity {
     TextView contents;
     TextView title;
     TextView userName;
+    ImageView star_button;
     SwipeRefreshLayout refresh;
+    Boolean star_click;
 
 
     @Override
@@ -69,6 +75,7 @@ public class PostDetailActivity extends AppCompatActivity {
         popup = findViewById(R.id.popupMenu);
         refresh = findViewById(R.id.detail_refresh);
         refresh.setColorSchemeResources(R.color.MyGreen);
+        star_button = findViewById(R.id.star_button);
 
         //초기화면 구성
         userName.setText(post.getUserName());
@@ -76,7 +83,7 @@ public class PostDetailActivity extends AppCompatActivity {
         contents.setText(post.getContent());
         isWriter();
         setList();
-
+        setStar();
         //리스너
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -130,6 +137,39 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
+        //starbutton 클릭
+        star_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference setBoard = FirebaseDatabase.getInstance().getReference("posts");
+                DatabaseReference setStar = FirebaseDatabase.getInstance().getReference("stars").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                if(star_click == false)
+                {
+                    star_button.setImageDrawable(getResources().getDrawable(R.drawable.star_2));
+                    star_click = true;
+                    String post_id= post.getKey();
+                    DBHelper2 helper = new DBHelper2(getApplicationContext());
+                    SQLiteDatabase db = helper.getWritableDatabase();
+                    db.execSQL("INSERT INTO STARPOST VALUES (NULL,?)",new String[]{post_id});
+                    post.setStars(post.getStars()+1);
+                    setBoard.child(post.getKey()).setValue(post);
+                    setStar.child(post.getKey()).setValue("star click!");
+                }
+                else
+                {
+                    star_button.setImageDrawable(getResources().getDrawable(R.drawable.star_1));
+                    star_click = false;
+                    DBHelper2 helper = new DBHelper2(getApplicationContext());
+                    SQLiteDatabase db = helper.getWritableDatabase();
+                    String sql = "DELETE FROM STARPOST WHERE postID = '" + post.getKey() +"';";
+                    db.execSQL(sql);
+                    post.setStars(post.getStars()-1);
+                    setBoard.child(post.getKey()).setValue(post);
+                    setStar.child(post.getKey()).removeValue();
+                    Toast.makeText(getApplicationContext(),"취소되었습니다",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 
@@ -137,15 +177,18 @@ public class PostDetailActivity extends AppCompatActivity {
     private void writeComment()
     {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("comments").child(post.getKey());
+        DatabaseReference setComments = FirebaseDatabase.getInstance().getReference("posts");
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String dataset[] = email.split("@");
         String username = dataset[0];
         String text = ((EditText)findViewById(R.id.detail_text)).getText().toString();
+        post.setComments(post.getComments()+1);
 
         if(text.length()>0) {
             Comment comment = new Comment(text,userId,username);
             database.push().setValue(comment);
+            setComments.child(post.getKey()).setValue(post);
             edittext.setText("");
         }
         else
@@ -253,6 +296,10 @@ public class PostDetailActivity extends AppCompatActivity {
                         database.child("comments").child(post.getKey()).child(key).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+
+                                DatabaseReference setBoard = FirebaseDatabase.getInstance().getReference("posts");
+                                post.setComments(post.getComments()-1);
+                                setBoard.child(post.getKey()).setValue(post);
                                 Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -272,5 +319,23 @@ public class PostDetailActivity extends AppCompatActivity {
                     }
                 });
         dialogBuilder.show();
+    }
+    private void setStar()
+    {
+        DBHelper2 helper = new DBHelper2(this);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String sql = "SELECT postID FROM STARPOST";
+        Cursor cursor = db.rawQuery(sql, null);
+        for(int i = 0; i<cursor.getCount();i++) {
+            cursor.moveToNext();
+            String posts = cursor.getString(0);
+
+            if(posts.equals(post.getKey())) {
+                star_button.setImageDrawable(getResources().getDrawable(R.drawable.star_2));
+                star_click = true;
+                return;
+            }
+        }
+        star_click = false;
     }
 }

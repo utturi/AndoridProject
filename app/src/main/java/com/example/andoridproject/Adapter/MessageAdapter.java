@@ -1,6 +1,7 @@
 package com.example.andoridproject.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.andoridproject.Activity.ReadMessageActivity;
 import com.example.andoridproject.R;
 
 import java.util.ArrayList;
@@ -15,9 +17,11 @@ import java.util.ArrayList;
 public class MessageAdapter extends BaseAdapter {
     ArrayList<String> messages;
     LayoutInflater inflater = null;
-    public MessageAdapter(ArrayList<String> items)
+    Context context;
+    public MessageAdapter(ArrayList<String> items,Context context)
     {
          messages = items;
+         this.context = context;
     }
     @Override
     public int getCount() {
@@ -43,14 +47,27 @@ public class MessageAdapter extends BaseAdapter {
             {
                 inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             }
+            final int index = messages.size()-(position+1);
             convertView = inflater.inflate(R.layout.message_item, parent, false);
             TextView oText = (TextView) convertView.findViewById(R.id.message_item_title);
             TextView oName = (TextView)convertView.findViewById(R.id.username);
             ImageView oProfile = (ImageView)convertView.findViewById(R.id.message_item_profile);
+            TextView oDate = convertView.findViewById(R.id.message_item_date);
             oProfile.setVisibility(View.GONE);
-            String[] message = messages.get(position).split("#");
+            final String[] message = messages.get(index).split("#");
             oText.setText(message[1]);
             oName.setText(message[0]);
+            oDate.setText(message[3]);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ReadMessageActivity.class);
+                    intent.putExtra("UID",message[2]);
+                    intent.putExtra("text",message[1]);
+                    intent.putExtra("name",message[0]);
+                    context.startActivity(intent);
+                }
+            });
         }
         return convertView;
     }

@@ -73,14 +73,14 @@ public class PostActivity extends AppCompatActivity {
         String time1 = format1.format(time);
         if(tit.length()>0 && content.length()>0) {
             if(button==2) {
-                Board board = new Board(tit, content, userId, username,time1);
+                Board board = new Board(tit, content, userId, username,time1,post.getComments(),post.getStars());
                 database.child("posts").child(post.getKey()).setValue(board);
                 Toast.makeText(getApplicationContext(), "등록중...", Toast.LENGTH_SHORT).show();
                 ((Tab1_Activity) Tab1_Activity.CONTEXT).onResume();
                 finish();
             }
             else {
-                Board board = new Board(tit, content, userId, username,time1);
+                Board board = new Board(tit, content, userId, username,time1,0,0);
                 database.child("posts").push().setValue(board);
                 Toast.makeText(getApplicationContext(), "등록중...", Toast.LENGTH_SHORT).show();
                 finish();

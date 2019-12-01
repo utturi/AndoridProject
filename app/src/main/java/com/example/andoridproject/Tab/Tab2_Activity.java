@@ -1,5 +1,6 @@
 package com.example.andoridproject.Tab;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ListView;
@@ -20,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+//TAB2 BACK UP
+
 public class Tab2_Activity extends AppCompatActivity {
     ArrayList<String> recieve;
     ArrayList<String> send;
@@ -29,9 +32,11 @@ public class Tab2_Activity extends AppCompatActivity {
     ListView send_list;
     private SwipeRefreshLayout refresh;
     private SwipeRefreshLayout refresh2;
+    public Context context;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_tab2);
         TabHost tabHost = findViewById(R.id.tabhost);
         recieve_list = findViewById(R.id.tab2_reciever);
@@ -93,7 +98,7 @@ public class Tab2_Activity extends AppCompatActivity {
                     String msg = messageData.getValue(String.class);
                     recieve.add(msg);
                 }
-                reciever= new MessageAdapter(recieve);
+                reciever= new MessageAdapter(recieve,context);
                 recieve_list.setAdapter(reciever);
             }
 
@@ -114,7 +119,7 @@ public class Tab2_Activity extends AppCompatActivity {
                     String msg = messageData.getValue(String.class);
                     send.add(msg);
                 }
-                sender= new MessageAdapter(send);
+                sender= new MessageAdapter(send,context);
                 send_list.setAdapter(sender);
             }
 

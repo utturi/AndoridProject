@@ -2,24 +2,16 @@ package com.example.andoridproject.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-
 import com.example.andoridproject.Item.Board;
 import com.example.andoridproject.Activity.PostDetailActivity;
 import com.example.andoridproject.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -67,9 +59,13 @@ public class BoardAdapter extends BaseAdapter {
             TextView oText = (TextView)convertView.findViewById(R.id.item_text);
             TextView oDate = convertView.findViewById(R.id.item_date);
             TextView commentNum = convertView.findViewById(R.id.item_chat);
+            TextView starNum = convertView.findViewById(R.id.item_star);
+
             oTextTitle.setText(data.get(index).getTitle());
             oText.setText(data.get(index).getContent());
             oDate.setText(data.get(index).getDate());
+            commentNum.setText(""+data.get(index).getComments());
+            starNum.setText(""+data.get(index).getStars());
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
