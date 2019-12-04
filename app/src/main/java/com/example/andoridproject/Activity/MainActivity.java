@@ -1,13 +1,17 @@
 package com.example.andoridproject.Activity;
 
+import android.Manifest;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.andoridproject.Adapter.CommentAdapter;
 import com.example.andoridproject.Etc.DBHelper2;
@@ -26,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends TabActivity {
+    public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 123;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +82,13 @@ public class MainActivity extends TabActivity {
             tabHost.getTabWidget().getChildAt(tab).getLayoutParams().height = (int) (50*(getResources( ).getDisplayMetrics( ).density));
 
         tabHost.setCurrentTab(0);
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
+        }
     }
 
     private void startLoginActivity()

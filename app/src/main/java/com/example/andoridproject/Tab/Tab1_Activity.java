@@ -14,11 +14,13 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,6 +36,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Activity.PostActivity;
 import com.example.andoridproject.Etc.BackPressCloseHandler;
 import com.example.andoridproject.Etc.DBHelper;
@@ -43,6 +46,7 @@ import com.example.andoridproject.Adapter.MainPagerAdapter;
 import com.example.andoridproject.R;
 import com.example.andoridproject.Adapter.Tab1BoardAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,14 +78,14 @@ public class Tab1_Activity extends AppCompatActivity {
     private BackPressCloseHandler backPressCloseHandler; // 2번 뒤로가기 종료
 
     //의현
-    private static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
+    public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 123;
     private SpeechRecognizer speechRecog;
-    ImageButton customDialogBtn;
+    //FloatingActionButton customDialogBtn;
     AlertDialog customDialog;
-    ImageView but;
-
-    FloatingActionButton fab_plus,fab_sound,fab_direct;
-    Animation FabOpen,FabClose,FabRClockwise,FabRanticlockwise;
+    ImageView but; //?
+    ImageView gv;
+    FloatingActionButton fab_plus, fab_sound, fab_direct;
+    Animation FabOpen, FabClose, FabRClockwise, FabRanticlockwise;
     boolean isOpen = false;
     //의현
 
@@ -92,20 +96,20 @@ public class Tab1_Activity extends AppCompatActivity {
         backPressCloseHandler = new BackPressCloseHandler(this);
 
         //의현
-        fab_plus = (FloatingActionButton)findViewById(R.id.fab_plus);
-        fab_sound = (FloatingActionButton)findViewById(R.id.fab_sound); //음성등록
-        fab_direct = (FloatingActionButton)findViewById(R.id.fab_direct); //직접등록
+        fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
+        fab_sound = (FloatingActionButton) findViewById(R.id.fab_sound); //음성등록
+        fab_direct = (FloatingActionButton) findViewById(R.id.fab_direct); //직접등록
         CONTEXT = this;
-        listView=findViewById(R.id.tab1_listview);
+        listView = findViewById(R.id.tab1_listview);
         //ViewPager
         indicator = (CircleIndicator) findViewById(R.id.indicator);
-        viewPager = (ViewPager) findViewById(R.id.mainbutton) ;
+        viewPager = (ViewPager) findViewById(R.id.mainbutton);
         ImageButton eat_button = findViewById(R.id.eatbut);
         setMainbut();
-        FabOpen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
-        FabClose = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        FabRClockwise = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
-        FabRanticlockwise = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
+        FabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        FabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        FabRClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
+        FabRanticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
         /* 여기 리스트뷰 클릭 수정 부분!
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -117,12 +121,11 @@ public class Tab1_Activity extends AppCompatActivity {
                 }
             }
         });
-
          */
         fab_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isOpen)
+                if (isOpen) //닫는거
                 {
                     fab_direct.startAnimation(FabClose);
                     fab_sound.startAnimation(FabClose);
@@ -130,9 +133,7 @@ public class Tab1_Activity extends AppCompatActivity {
                     fab_sound.setClickable(false);
                     fab_direct.setClickable(false);
                     isOpen = false;
-                }
-                else
-                {
+                } else { //여는거
                     fab_direct.startAnimation(FabOpen);
                     fab_sound.startAnimation(FabOpen);
                     fab_plus.startAnimation(FabRClockwise);
@@ -142,6 +143,7 @@ public class Tab1_Activity extends AppCompatActivity {
                 }
             }
         });
+
         eat_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +153,7 @@ public class Tab1_Activity extends AppCompatActivity {
                 Cursor cursor = db.rawQuery(sql, null);
                 if (cursor.getCount() != 0) {
                     cursor.moveToNext();
-                    for(int i = 0; i < viewPager.getCurrentItem();i++) {
+                    for (int i = 0; i < viewPager.getCurrentItem(); i++) {
                         cursor.moveToNext();
                     }
                     String name = cursor.getString(0);
@@ -167,7 +169,7 @@ public class Tab1_Activity extends AppCompatActivity {
 
         // Youtube 버튼
         youtube_but = findViewById(R.id.youtubebut);
-        youtube_but.setOnClickListener(new View.OnClickListener(){
+        youtube_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ListViewItem[] items;
@@ -178,7 +180,7 @@ public class Tab1_Activity extends AppCompatActivity {
                 if (cursor.getCount() != 0) {
                     cursor.moveToNext();
                     // 뷰페이저가 바뀔 때 마다 count
-                    for(int i = 0; i < viewPager.getCurrentItem(); i++)
+                    for (int i = 0; i < viewPager.getCurrentItem(); i++)
                         cursor.moveToNext();
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" +
                             cursor.getString(0) + " 레시피"));
@@ -192,11 +194,18 @@ public class Tab1_Activity extends AppCompatActivity {
         });
 
         //의현
-        //gv = findViewById(R.id.soundbutton);
-        customDialogBtn = findViewById(R.id.fab_sound);
-        customDialogBtn.setOnClickListener(new View.OnClickListener(){
+        //gv = findViewById(R.id.fab_sound);
+        /*customDialogBtn = findViewById(R.id.fab_sound);
+        customDialogBtn*/
+        fab_sound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(getApplicationContext(),"음성 권한이 필요합니다...앱을 재실행해주세요!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(Tab1_Activity.this);
                 LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View customDialogView = inflater.inflate(R.layout.dialog, null);
@@ -207,37 +216,24 @@ public class Tab1_Activity extends AppCompatActivity {
 
                 customDialog = builder.create();
                 customDialog.show();
-
-
                 //음성인식
-                if (ContextCompat.checkSelfPermission(Tab1_Activity.this,
-                        Manifest.permission.RECORD_AUDIO)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(Tab1_Activity.this,
-                            Manifest.permission.RECORD_AUDIO)) {
-                    } else {
-                        ActivityCompat.requestPermissions(Tab1_Activity.this,
-                                new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
-                    }
-                } else {
-                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-                    intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-                    speechRecog.startListening(intent);
-                }
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
+                intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+                speechRecog.startListening(intent);
             }
         });
         initializeSpeechRecognizer();
         //의현
+
 
         //직접등록버튼 입력 -> 달력(유통기한설정)
         fab_direct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(Tab1_Activity.this);
-                dialogBuilder.setTitle("음식입력");
+                dialogBuilder.setTitle("음식 입력");
                 final EditText et = new EditText(Tab1_Activity.this);
                 dialogBuilder.setView(et)
                         .setCancelable(true)
@@ -257,43 +253,45 @@ public class Tab1_Activity extends AppCompatActivity {
                         });
                 dialogBuilder.show();
             }
-            });
+        });
         // DatePickerDialog
         mDialog = new DatePickerDialog(this, listener, 2019, 11, 8);
     }
 
     //리스트뷰 setting
-    public void setList()
-    {
-       DatabaseReference database = FirebaseDatabase.getInstance().getReference("posts");
-       items = new ArrayList<>();
-       items.clear();
+    public void setList() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("posts");
+        items = new ArrayList<>();
+        items.clear();
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot messageData : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String key = messageData.getKey();
                     Board data = messageData.getValue(Board.class);
                     data.setKey(key);
                     items.add(data);
                 }
-                adapter = new Tab1BoardAdapter(items,getApplicationContext());
+                adapter = new Tab1BoardAdapter(items, getApplicationContext());
                 listView.setAdapter(adapter);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        
+
     }
+
     //의현
     private void initializeSpeechRecognizer() {
-        if (SpeechRecognizer.isRecognitionAvailable(this)) {
-            speechRecog = SpeechRecognizer.createSpeechRecognizer(this);
+        Log.e("Tab1", "I m here!");
+        if (SpeechRecognizer.isRecognitionAvailable(getApplicationContext())) {
+            speechRecog = SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
             speechRecog.setRecognitionListener(new RecognitionListener() {
                 @Override
-                public void onReadyForSpeech(Bundle params) { }
+                public void onReadyForSpeech(Bundle params) {
+                }
 
                 @Override
                 public void onBeginningOfSpeech() {
@@ -370,10 +368,12 @@ public class Tab1_Activity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onPartialResults(Bundle partialResults) { }
+                public void onPartialResults(Bundle partialResults) {
+                }
 
                 @Override
-                public void onEvent(int eventType, Bundle params) { }
+                public void onEvent(int eventType, Bundle params) {
+                }
             });
         }
     }
@@ -391,9 +391,9 @@ public class Tab1_Activity extends AppCompatActivity {
             }
             if (monthOfYear < 10)
                 month = "0" + monthOfYear;
-                String date = year + "-" + month + "-" + day;
-                String[] arr = new String[]{name, date};
-                insertDB(arr);
+            String date = year + "-" + month + "-" + day;
+            String[] arr = new String[]{name, date};
+            insertDB(arr);
         }
     };
 
@@ -428,7 +428,7 @@ public class Tab1_Activity extends AppCompatActivity {
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor.getCount() != 0) {
             items = new ListViewItem[cursor.getCount()];
-            for(int i = 0; i<cursor.getCount();i++) {
+            for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToNext();
                 String name = cursor.getString(0);
                 String date = cursor.getString(1);
@@ -436,9 +436,7 @@ public class Tab1_Activity extends AppCompatActivity {
                 items[i].setName(name);
                 items[i].setDate(date);
             }
-        }
-        else
-        {
+        } else {
             items = new ListViewItem[1];
             items[0] = new ListViewItem();
             String name = "음식이 없어요!";
@@ -446,11 +444,12 @@ public class Tab1_Activity extends AppCompatActivity {
             items[0].setDate("");
         }
         db.close();
-        pagerAdapter = new MainPagerAdapter(this,items) ;
+        pagerAdapter = new MainPagerAdapter(this, items);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageMargin(20);
         indicator.setViewPager(viewPager);
     }
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
