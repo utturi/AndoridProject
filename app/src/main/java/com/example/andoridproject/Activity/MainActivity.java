@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends TabActivity {
     public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 123;
+    public static TabHost tabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class MainActivity extends TabActivity {
         if(FirebaseAuth.getInstance().getCurrentUser()==null)
             startLoginActivity();
         setStarDB();
-        TabHost tabHost = getTabHost();
+        tabHost = getTabHost();
         TabHost.TabSpec spec;
         Intent intent;
 

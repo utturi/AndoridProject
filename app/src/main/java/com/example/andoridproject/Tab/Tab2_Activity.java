@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Adapter.MessageAdapter;
 import com.example.andoridproject.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -128,5 +129,11 @@ public class Tab2_Activity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        MainActivity.tabHost.setCurrentTab(0);
     }
 }

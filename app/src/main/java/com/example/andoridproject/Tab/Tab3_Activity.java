@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ListView;
 
+import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Adapter.BoardAdapter;
 import com.example.andoridproject.Item.Board;
 import com.example.andoridproject.Activity.PostActivity;
@@ -97,5 +98,11 @@ public class Tab3_Activity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        MainActivity.tabHost.setCurrentTab(0);
     }
 }
