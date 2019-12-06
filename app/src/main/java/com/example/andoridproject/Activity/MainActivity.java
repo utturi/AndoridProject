@@ -37,7 +37,7 @@ public class MainActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(FirebaseAuth.getInstance().getCurrentUser()==null)
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
             startLoginActivity();
         setStarDB();
         tabHost = getTabHost();
@@ -79,8 +79,8 @@ public class MainActivity extends TabActivity {
         spec = tabHost.newTabSpec("Tab Spec 5").setIndicator(tabwidget5).setContent(intent);
         tabHost.addTab(spec);
 
-        for(int tab = 0; tab < tabHost.getTabWidget().getChildCount(); tab++)
-            tabHost.getTabWidget().getChildAt(tab).getLayoutParams().height = (int) (50*(getResources( ).getDisplayMetrics( ).density));
+        for (int tab = 0; tab < tabHost.getTabWidget().getChildCount(); tab++)
+            tabHost.getTabWidget().getChildAt(tab).getLayoutParams().height = (int) (50 * (getResources().getDisplayMetrics().density));
 
         tabHost.setCurrentTab(0);
 
@@ -92,32 +92,32 @@ public class MainActivity extends TabActivity {
         }
     }
 
-    private void startLoginActivity()
-    {
-        Intent intent = new Intent(this,LoginActivity.class);
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void setStarDB()
-    {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("stars").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot messageData : dataSnapshot.getChildren())
-                {
-                    String key = messageData.getKey();
-                    DBHelper2 helper = new DBHelper2(getApplicationContext());
-                    SQLiteDatabase db = helper.getWritableDatabase();
-                    db.execSQL("INSERT INTO STARPOST VALUES (NULL,?)",new String[]{key});
+    private void setStarDB() {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference("stars").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            database.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+                        String key = messageData.getKey();
+                        DBHelper2 helper = new DBHelper2(getApplicationContext());
+                        SQLiteDatabase db = helper.getWritableDatabase();
+                        db.execSQL("INSERT INTO STARPOST VALUES (NULL,?)", new String[]{key});
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+
+            });
+        }
     }
 }

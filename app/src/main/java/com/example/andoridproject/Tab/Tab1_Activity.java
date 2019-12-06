@@ -110,18 +110,7 @@ public class Tab1_Activity extends AppCompatActivity {
         FabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         FabRClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
         FabRanticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
-        /* 여기 리스트뷰 클릭 수정 부분!
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position>=0)
-                {
-                    Intent intent = new Intent(getApplicationContext(), Tab3_Activity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-         */
+
         fab_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,9 +183,6 @@ public class Tab1_Activity extends AppCompatActivity {
         });
 
         //의현
-        //gv = findViewById(R.id.fab_sound);
-        /*customDialogBtn = findViewById(R.id.fab_sound);
-        customDialogBtn*/
         fab_sound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -285,7 +271,6 @@ public class Tab1_Activity extends AppCompatActivity {
 
     //의현
     private void initializeSpeechRecognizer() {
-        Log.e("Tab1", "I m here!");
         if (SpeechRecognizer.isRecognitionAvailable(getApplicationContext())) {
             speechRecog = SpeechRecognizer.createSpeechRecognizer(getApplicationContext());
             speechRecog.setRecognitionListener(new RecognitionListener() {

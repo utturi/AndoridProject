@@ -2,6 +2,7 @@ package com.example.andoridproject.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +46,13 @@ public class MainPagerAdapter extends PagerAdapter {
                     String[] calcDate = items[position].getDate().split("-");
                     int Dday_result = Dday.caldate(Integer.parseInt(calcDate[0]), Integer.parseInt(calcDate[1]), Integer.parseInt(calcDate[2]));
                     if (Dday_result > 0) {
-                        linearLayout.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.red_button));
+                        linearLayout.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.main_button));
                         d_day.setText("D + " + Dday_result);
+                        d_day.setTextColor(Color.RED);
                     } else if (Dday_result == 0) {
-                        linearLayout.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.red_button));
+                        linearLayout.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.main_button));
                         d_day.setText("D - DAY");
+                        d_day.setTextColor(Color.RED);
                     } else {
                         Dday_result = -Dday_result;
                         d_day.setText("D - " + Dday_result);

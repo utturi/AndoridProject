@@ -1,15 +1,20 @@
 package com.example.andoridproject.Tab;
 
+import android.app.ActionBar;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TimePicker;
@@ -17,6 +22,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.andoridproject.Activity.LoginActivity;
 import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Etc.AlarmReceiver;
@@ -31,6 +38,9 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class Tab5_Activity extends AppCompatActivity {
+    AlertDialog alram;
+    Button alram_setting;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +59,8 @@ public class Tab5_Activity extends AppCompatActivity {
             }
         });
 
-        final TimePicker picker=(TimePicker)findViewById(R.id.timePicker);
-        picker.setIs24HourView(true);
-
-
+        final TimePicker picker = (TimePicker) findViewById(R.id.timePicker);
+        /*picker.setIs24HourView(true);
         // 앞서 설정한 값으로 보여주기
         // 없으면 디폴트 값은 현재시간
         SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
@@ -63,7 +71,7 @@ public class Tab5_Activity extends AppCompatActivity {
 
         Date nextDate = nextNotifyTime.getTime();
         String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(nextDate);
-        Toast.makeText(getApplicationContext(),"[처음 실행시] 다음 알람은 " + date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "[처음 실행시] 다음 알람은 " + date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
 
 
         // 이전 설정값으로 TimePicker 초기화
@@ -75,39 +83,35 @@ public class Tab5_Activity extends AppCompatActivity {
         int pre_minute = Integer.parseInt(MinuteFormat.format(currentTime));
 
 
-        if (Build.VERSION.SDK_INT >= 23 ){
+        if (Build.VERSION.SDK_INT >= 23) {
             picker.setHour(pre_hour);
             picker.setMinute(pre_minute);
-        }
-        else{
+        } else {
             picker.setCurrentHour(pre_hour);
             picker.setCurrentMinute(pre_minute);
-        }
+        }*/
 
-
-        Button but = (Button) findViewById(R.id.button);
+/*
+        Button but = (Button) findViewById(R.id.setting_button);
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
 
                 int hour, hour_24, minute;
                 String am_pm;
-                if (Build.VERSION.SDK_INT >= 23 ){
+                if (Build.VERSION.SDK_INT >= 23) {
                     hour_24 = picker.getHour();
                     minute = picker.getMinute();
-                }
-                else{
+                } else {
                     hour_24 = picker.getCurrentHour();
                     minute = picker.getCurrentMinute();
                 }
-                if(hour_24 > 12) {
+                if (hour_24 > 12) {
                     am_pm = "PM";
                     hour = hour_24 - 12;
-                }
-                else
-                {
+                } else {
                     hour = hour_24;
-                    am_pm="AM";
+                    am_pm = "AM";
                 }
 
                 // 현재 지정된 시간으로 알람 시간 설정
@@ -124,20 +128,87 @@ public class Tab5_Activity extends AppCompatActivity {
 
                 Date currentDateTime = calendar.getTime();
                 String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
-                Toast.makeText(getApplicationContext(),date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
 
                 //  Preference에 설정한 값 저장
                 SharedPreferences.Editor editor = getSharedPreferences("daily alarm", MODE_PRIVATE).edit();
-                editor.putLong("nextNotifyTime", (long)calendar.getTimeInMillis());
+                editor.putLong("nextNotifyTime", (long) calendar.getTimeInMillis());
                 editor.apply();
 
                 diaryNotification(calendar);
             }
+        });*/
+
+
+        alram_setting = findViewById(R.id.alram_button);
+        alram_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Tab5_Activity.this);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View customDialogView = inflater.inflate(R.layout.alramtime, null);
+                picker.setIs24HourView(true);
+
+                builder.setView(customDialogView);
+
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int hour, hour_24, minute;
+                        String am_pm;
+                        Log.e("num","2");
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            hour_24 = picker.getHour();
+                            minute = picker.getMinute();
+                        } else {
+                            hour_24 = picker.getCurrentHour();
+                            minute = picker.getCurrentMinute();
+                        }
+                        if (hour_24 > 12) {
+                            am_pm = "PM";
+                            hour = hour_24 - 12;
+                        } else {
+                            hour = hour_24;
+                            am_pm = "AM";
+                        }
+
+                        // 현재 지정된 시간으로 알람 시간 설정
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(System.currentTimeMillis());
+                        calendar.set(Calendar.HOUR_OF_DAY, hour_24);
+                        calendar.set(Calendar.MINUTE, minute);
+                        calendar.set(Calendar.SECOND, 0);
+
+                        // 이미 지난 시간을 지정했다면 다음날 같은 시간으로 설정
+                        if (calendar.before(Calendar.getInstance())) {
+                            Log.e("num","1");
+                            calendar.add(Calendar.DATE, 1);
+                        }
+
+                        Date currentDateTime = calendar.getTime();
+                        String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
+                        Toast.makeText(getApplicationContext(),date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
+
+                        //  Preference에 설정한 값 저장
+                        SharedPreferences.Editor editor = getSharedPreferences("daily alarm", MODE_PRIVATE).edit();
+                        editor.putLong("nextNotifyTime", (long)calendar.getTimeInMillis());
+                        editor.apply();
+                        diaryNotification(calendar);
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                alram = builder.create();
+                alram.show();
+            }
         });
     }
 
-    void diaryNotification(Calendar calendar)
-    {
+    void diaryNotification(Calendar calendar) {
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 //        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 //        Boolean dailyNotify = sharedPref.getBoolean(SettingsActivity.KEY_PREF_DAILY_NOTIFICATION, true);
@@ -151,13 +222,9 @@ public class Tab5_Activity extends AppCompatActivity {
 
         // 사용자가 매일 알람을 허용했다면
         if (dailyNotify) {
-
-
             if (alarmManager != null) {
-
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         AlarmManager.INTERVAL_DAY, pendingIntent);
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
@@ -180,8 +247,7 @@ public class Tab5_Activity extends AppCompatActivity {
 //        }
     }
 
-    private void startLoginActivity()
-    {
+    private void startLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
