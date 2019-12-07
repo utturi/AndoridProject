@@ -116,7 +116,6 @@ public class MainActivity extends TabActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-
             });
         }
     }
