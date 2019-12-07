@@ -22,8 +22,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.andoridproject.Activity.LoginActivity;
 import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Etc.AlarmReceiver;
