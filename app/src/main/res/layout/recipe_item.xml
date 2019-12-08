@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/communiti_design">
+    <ImageView
+        android:id="@+id/recipe_item"
+        android:layout_width="220dp"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src ="@drawable/recipe1"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/recipe_intro"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="맛있는 제육복음~★"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+</LinearLayout>

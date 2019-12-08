@@ -14,51 +14,38 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.example.andoridproject.Activity.MainActivity;
-import com.example.andoridproject.Activity.PostActivity;
+import com.example.andoridproject.Adapter.RecyclerAdapter;
 import com.example.andoridproject.Etc.BackPressCloseHandler;
 import com.example.andoridproject.Etc.DBHelper;
-import com.example.andoridproject.Item.Board;
+import com.example.andoridproject.Etc.RecyclerViewDecoration;
 import com.example.andoridproject.Item.ListViewItem;
 import com.example.andoridproject.Adapter.MainPagerAdapter;
+import com.example.andoridproject.Item.Recipe;
 import com.example.andoridproject.R;
-import com.example.andoridproject.Adapter.Tab1BoardAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 import me.relex.circleindicator.CircleIndicator;
 
 public class Tab1_Activity extends AppCompatActivity {
@@ -70,9 +57,7 @@ public class Tab1_Activity extends AppCompatActivity {
     private ViewPager viewPager;           //뷰페이저
     private MainPagerAdapter pagerAdapter; //어댑터
     private CircleIndicator indicator;      //인디케이터
-    private ArrayList<Board> items;
-    private Tab1BoardAdapter adapter;
-    private ListView listView;
+    private RecyclerView recyclerView;
     //대호
     public static Context CONTEXT;
     private BackPressCloseHandler backPressCloseHandler; // 2번 뒤로가기 종료
@@ -94,18 +79,18 @@ public class Tab1_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab1);
         backPressCloseHandler = new BackPressCloseHandler(this);
-
         //의현
         fab_plus = (FloatingActionButton) findViewById(R.id.fab_plus);
         fab_sound = (FloatingActionButton) findViewById(R.id.fab_sound); //음성등록
         fab_direct = (FloatingActionButton) findViewById(R.id.fab_direct); //직접등록
         CONTEXT = this;
-        listView = findViewById(R.id.tab1_listview);
         //ViewPager
+        recyclerView = findViewById(R.id.tab1_recycler);
         indicator = (CircleIndicator) findViewById(R.id.indicator);
         viewPager = (ViewPager) findViewById(R.id.mainbutton);
         ImageButton eat_button = findViewById(R.id.eatbut);
         setMainbut();
+        setRecipe();
         FabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         FabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         FabRClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
@@ -196,8 +181,12 @@ public class Tab1_Activity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View customDialogView = inflater.inflate(R.layout.dialog, null);
                 but = customDialogView.findViewById(R.id.but);
-                GlideDrawableImageViewTarget gif = new GlideDrawableImageViewTarget(but);
-                Glide.with(Tab1_Activity.this).load(R.drawable.soundview).into(gif);
+                //GlideDrawableImageViewTarget gif = new GlideDrawableImageViewTarget(but);
+                Glide.with(Tab1_Activity.this)
+                        //.asGif()
+                        .load(R.drawable.soundview)
+                        .skipMemoryCache(true)
+                        .into(but);
                 builder.setView(customDialogView);
 
                 customDialog = builder.create();
@@ -245,29 +234,6 @@ public class Tab1_Activity extends AppCompatActivity {
     }
 
     //리스트뷰 setting
-    public void setList() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("posts");
-        items = new ArrayList<>();
-        items.clear();
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                    String key = messageData.getKey();
-                    Board data = messageData.getValue(Board.class);
-                    data.setKey(key);
-                    items.add(data);
-                }
-                adapter = new Tab1BoardAdapter(items, getApplicationContext());
-                listView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-    }
 
     //의현
     private void initializeSpeechRecognizer() {
@@ -400,8 +366,6 @@ public class Tab1_Activity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         setMainbut();
-        setList();
-        //setGage();
     }
 
     // MainButton 구성
@@ -439,5 +403,32 @@ public class Tab1_Activity extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         backPressCloseHandler.onBackPressed();
+    }
+    public void setRecipe()
+    {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("recipes");
+        final ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        recipes.clear();
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+                    String data = messageData.getValue(String.class);
+                    String[] items = data.split("#");
+                    Recipe recipe = new Recipe(items[1],"http://www.10000recipe.com/recipe/"+items[0]);
+                    recipes.add(recipe);
+                }
+                RecyclerAdapter recyclerAdapter = new RecyclerAdapter(recipes,CONTEXT);
+                recyclerView.setAdapter(recyclerAdapter);
+                recyclerView.addItemDecoration(new RecyclerViewDecoration(48));
+                LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                llm.setOrientation(LinearLayoutManager.HORIZONTAL);
+                recyclerView.setLayoutManager(llm);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

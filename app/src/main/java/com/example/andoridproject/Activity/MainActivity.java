@@ -22,12 +22,20 @@ import com.example.andoridproject.Tab.Tab2_Activity;
 import com.example.andoridproject.Tab.Tab3_Activity;
 import com.example.andoridproject.Tab.Tab4_Activity;
 import com.example.andoridproject.Tab.Tab5_Activity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends TabActivity {
     public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 123;
@@ -119,4 +127,25 @@ public class MainActivity extends TabActivity {
             });
         }
     }
+    /*
+    private void downRecipes() throws IOException {
+        StorageReference pathReference = FirebaseStorage.getInstance().getReference().child("recipes/1.png");
+
+        File localFile = File.createTempFile("1", "png");
+
+        pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                // Local temp file has been created
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+
+    }
+
+     */
 }

@@ -26,10 +26,8 @@ public class ReadMessageActivity extends AppCompatActivity {
         name = intent.getStringExtra("name");
         text = intent.getStringExtra("text");
         UID = intent.getStringExtra("UID");
-        if(UID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
-        {
+        if(intent.getStringExtra("Identifier").equals("sender"))
             username.setText("Sender : " + name);
-        }
         else
             username.setText("Receiver : " + name);
         textView.setText("Text :  " +text);

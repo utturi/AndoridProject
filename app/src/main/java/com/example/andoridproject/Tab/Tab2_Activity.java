@@ -99,7 +99,7 @@ public class Tab2_Activity extends AppCompatActivity {
                     String msg = messageData.getValue(String.class);
                     recieve.add(msg);
                 }
-                reciever= new MessageAdapter(recieve,context);
+                reciever= new MessageAdapter(recieve,context,0  );
                 recieve_list.setAdapter(reciever);
             }
 
@@ -120,7 +120,7 @@ public class Tab2_Activity extends AppCompatActivity {
                     String msg = messageData.getValue(String.class);
                     send.add(msg);
                 }
-                sender= new MessageAdapter(send,context);
+                sender= new MessageAdapter(send,context,1);
                 send_list.setAdapter(sender);
             }
 

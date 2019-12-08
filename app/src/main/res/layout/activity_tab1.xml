@@ -112,187 +112,28 @@
         android:elevation="6dp"/>
 
     <LinearLayout
-        android:layout_width="390dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="9dp"
         android:layout_below="@+id/eatbut"
-        android:background="@drawable/communiti_design"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="게시판"
+            android:text="추천 레시피"
+            android:textColor="#748A9D"
             android:paddingTop="20dp"
             android:textSize="20dp"
-            android:layout_marginLeft="20dp"
-            android:fontFamily="@font/dream_mid"/>
+            android:layout_marginLeft="20dp"/>
 
-        <ListView
-            android:id="@+id/tab1_listview"
-            android:listSelector="@android:color/transparent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tab1_recycler"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_width="370dp"
-            android:layout_height="230dp"/>
-    </LinearLayout>
-    <!--<LinearLayout
-        android:id="@+id/communiti"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/youtubebut"
-        android:background="@drawable/communiti_design"
-        android:orientation="vertical"
-        android:padding="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="자유게시판"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-        </LinearLayout>
-
-        <LinearLayout
+            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="장터게시판"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="홍보게시판"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-        </LinearLayout>
-    </LinearLayout>-->
-
-    <!--
-    //직접등록버튼
-
-    <ImageButton
-        android:id="@+id/directbutton"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:scaleType="fitXY"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="30dp"
-        android:layout_below="@+id/youtubebut"
-        android:background="#FFFFFF"
-        android:src="@drawable/directbutton" />
-
-    //음성등록버튼
-
-    <ImageButton
-        android:id="@+id/soundbutton"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="30dp"
-        android:scaleType="fitXY"
-        android:layout_below="@+id/directbutton"
-        android:background="#FFFFFF"
-        android:src="@drawable/soundbutton" />
-
-    -->
-    <!--
-    <LinearLayout
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@+id/soundbutton"
-        android:layout_below="@+id/eatbut"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="200dp"
-        android:orientation="vertical"
-        android:gravity="bottom">
-
-        <ImageButton
-            android:id="@+id/layer10"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="@drawable/nomal_top"/>
-        <ImageButton
-            android:id="@+id/layer9"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer8"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer7"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer6"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer5"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer4"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer3"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer2"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="#cccc"/>
-        <ImageButton
-            android:id="@+id/layer1"
-            android:layout_width="120dp"
-            android:layout_height="23dp"
-            android:background="@drawable/nomal_bottom"/>
-
+            android:layout_height="300dp"
+            android:scrollbars="horizontal" />
     </LinearLayout>
-
--->
 </RelativeLayout>

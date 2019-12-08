@@ -18,10 +18,12 @@ public class MessageAdapter extends BaseAdapter {
     ArrayList<String> messages;
     LayoutInflater inflater = null;
     Context context;
-    public MessageAdapter(ArrayList<String> items,Context context)
+    int identifier;
+    public MessageAdapter(ArrayList<String> items,Context context,int identifier)
     {
          messages = items;
          this.context = context;
+         this.identifier = identifier;
     }
     @Override
     public int getCount() {
@@ -65,6 +67,10 @@ public class MessageAdapter extends BaseAdapter {
                     intent.putExtra("UID",message[2]);
                     intent.putExtra("text",message[1]);
                     intent.putExtra("name",message[0]);
+                    if(identifier ==0)
+                        intent.putExtra("Identifier","sender");
+                    else
+                        intent.putExtra("Identifier","receiver");
                     context.startActivity(intent);
                 }
             });
