@@ -36,7 +36,6 @@
         android:text="2019-01-01"
         android:textSize="35dp"
         android:fontFamily="@font/happy_mid"
-
         android:textColor="#748A9D"
         android:layout_gravity="right"
         android:layout_marginRight="25dp"/>

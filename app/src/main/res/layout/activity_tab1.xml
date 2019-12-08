@@ -126,10 +126,17 @@
             android:paddingTop="20dp"
             android:textSize="20dp"
             android:layout_marginLeft="20dp"/>
+        <View
+            android:id="@+id/tool"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/toolbar"
+            android:background="@color/divider"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tab1_recycler"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_width="match_parent"
