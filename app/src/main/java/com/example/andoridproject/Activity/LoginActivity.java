@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            startMainActivity();
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
         password_reset = findViewById(R.id.password_reset);
@@ -93,5 +95,5 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
 }
+

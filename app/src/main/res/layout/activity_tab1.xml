@@ -1,89 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/toolbar"
-        android:textColor="#748A9D"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:padding="10dp"
-        android:text="Home"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
-    <View
-        android:id="@+id/toolLine"
+    <ScrollView
+        android:id="@+id/tab1_scroll"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_below="@id/toolbar"
-        android:background="@color/divider"/>
+        android:layout_height="match_parent">
 
-    //메인화면 - 큰 회색 화면
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/mainbutton"
-        android:layout_width="380dp"
-        android:layout_height="230dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/toolLine"/>
+            <TextView
+                android:id="@+id/toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:padding="10dp"
+                android:text="Home"
+                android:textColor="#748A9D"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
-    <me.relex.circleindicator.CircleIndicator
-        android:id="@+id/indicator"
-        app:ci_drawable="@drawable/black_radius"
-        app:ci_height="5dp"
-        app:ci_width="5dp"
-        app:ci_margin="4dp"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/mainbutton"
-        android:layout_height="25dp"/>
+            <View
+                android:id="@+id/toolLine"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/toolbar"
+                android:background="@color/divider" />
 
-    //유튜브 버튼
+            //메인화면 - 큰 회색 화면
 
-    <ImageButton
-        android:id="@+id/youtubebut"
-        android:layout_width="180dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/mainbutton"
-        android:scaleType="centerInside"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="20dp"
-        android:adjustViewBounds="true"
-        android:background="#FFFFFF"
-        android:src="@drawable/youtubebut" />
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/mainbutton"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:layout_below="@+id/toolLine"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp" />
 
-    //먹었다 버튼
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_below="@+id/mainbutton"
+                app:ci_drawable="@drawable/black_radius"
+                app:ci_height="5dp"
+                app:ci_margin="4dp"
+                app:ci_width="5dp" />
 
-    <ImageButton
-        android:id="@+id/eatbut"
-        android:layout_width="180dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/mainbutton"
-        android:layout_toRightOf="@+id/youtubebut"
-        android:scaleType="centerInside"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:adjustViewBounds="true"
-        android:background="#FFFFFF"
-        android:src="@drawable/eatenbut" />
+            //유튜브 버튼
+
+            <ImageButton
+                android:id="@+id/youtubebut"
+                android:layout_width="180dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/mainbutton"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:background="#FFFFFF"
+                android:scaleType="centerInside"
+                android:src="@drawable/youtubebut" />
+
+            //먹었다 버튼
+
+            <ImageButton
+                android:id="@+id/eatbut"
+                android:layout_width="180dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/mainbutton"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/youtubebut"
+                android:adjustViewBounds="true"
+                android:background="#FFFFFF"
+                android:scaleType="centerInside"
+                android:src="@drawable/eatenbut" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/eatbut"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:text="추천 레시피"
+                    android:textColor="#748A9D"
+                    android:textSize="20dp" />
+
+                <View
+                    android:id="@+id/tool"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/toolbar"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/divider" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tab1_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="10dp"
+                    android:scrollbars="horizontal" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_plus"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        app:pressedTranslationZ="12dp"
+        android:elevation="6dp"
         android:src="@drawable/ic_action_plus"
-        android:elevation="6dp"/>
+        app:pressedTranslationZ="12dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_sound"
@@ -93,10 +140,10 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
-        app:pressedTranslationZ="12dp"
-        android:visibility="invisible"
+        android:elevation="6dp"
         android:src="@drawable/ic_action_mike"
-        android:elevation="6dp"/>
+        android:visibility="invisible"
+        app:pressedTranslationZ="12dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_direct"
@@ -106,41 +153,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
-        app:pressedTranslationZ="12dp"
-        android:visibility="invisible"
+        android:elevation="6dp"
         android:src="@drawable/ic_action_pencil"
-        android:elevation="6dp"/>
+        android:visibility="invisible"
+        app:pressedTranslationZ="12dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/eatbut"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="추천 레시피"
-            android:textColor="#748A9D"
-            android:paddingTop="20dp"
-            android:textSize="20dp"
-            android:layout_marginLeft="20dp"/>
-        <View
-            android:id="@+id/tool"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_below="@id/toolbar"
-            android:background="@color/divider"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tab1_recycler"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scrollbars="horizontal" />
-    </LinearLayout>
 </RelativeLayout>

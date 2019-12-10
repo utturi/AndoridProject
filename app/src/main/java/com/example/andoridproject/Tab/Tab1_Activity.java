@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +59,7 @@ public class Tab1_Activity extends AppCompatActivity {
     private MainPagerAdapter pagerAdapter; //어댑터
     private CircleIndicator indicator;      //인디케이터
     private RecyclerView recyclerView;
+    private ScrollView scrollView;
     //대호
     public static Context CONTEXT;
     private BackPressCloseHandler backPressCloseHandler; // 2번 뒤로가기 종료
@@ -88,13 +90,15 @@ public class Tab1_Activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.tab1_recycler);
         indicator = (CircleIndicator) findViewById(R.id.indicator);
         viewPager = (ViewPager) findViewById(R.id.mainbutton);
-        ImageButton eat_button = findViewById(R.id.eatbut);
-        setMainbut();
-        setRecipe();
+        scrollView = findViewById(R.id.tab1_scroll);
         FabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         FabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         FabRClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
         FabRanticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
+        recyclerView.setNestedScrollingEnabled(false);
+        ImageButton eat_button = findViewById(R.id.eatbut);
+        setMainbut();
+        setRecipe();
 
         fab_plus.setOnClickListener(new View.OnClickListener() {
             @Override

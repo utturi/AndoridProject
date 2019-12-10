@@ -45,8 +45,6 @@ public class MainActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (FirebaseAuth.getInstance().getCurrentUser() == null)
-            startLoginActivity();
         setStarDB();
         tabHost = getTabHost();
         TabHost.TabSpec spec;
@@ -100,12 +98,6 @@ public class MainActivity extends TabActivity {
         }
     }
 
-    private void startLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
     private void setStarDB() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             DatabaseReference database = FirebaseDatabase.getInstance().getReference("stars").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -127,25 +119,4 @@ public class MainActivity extends TabActivity {
             });
         }
     }
-    /*
-    private void downRecipes() throws IOException {
-        StorageReference pathReference = FirebaseStorage.getInstance().getReference().child("recipes/1.png");
-
-        File localFile = File.createTempFile("1", "png");
-
-        pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                // Local temp file has been created
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-    }
-
-     */
 }

@@ -33,13 +33,13 @@ public class SplashActivity extends Activity {
         });
 
         Handler hd = new Handler();
-        hd.postDelayed(new splashhandler(), 3000); // 1초 후에 hd handler 실행  3000ms = 3초
+        hd.postDelayed(new splashhandler(), 1000); // 1초 후에 hd handler 실행  3000ms = 3초
 
 
     }
     private class splashhandler implements Runnable{
         public void run(){
-            startActivity(new Intent(getApplication(), MainActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
+            startActivity(new Intent(getApplication(), LoginActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
             SplashActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
         }
     }
