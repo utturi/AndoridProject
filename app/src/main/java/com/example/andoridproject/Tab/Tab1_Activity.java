@@ -75,6 +75,7 @@ public class Tab1_Activity extends AppCompatActivity {
     Animation FabOpen, FabClose, FabRClockwise, FabRanticlockwise;
     boolean isOpen = false;
     //의현
+    //수정
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
