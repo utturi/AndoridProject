@@ -19,4 +19,9 @@
         android:layout_below="@id/tab4_title"
         android:background="@color/divider"/>
 
+    <ListView
+        android:id="@+id/listview_array"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

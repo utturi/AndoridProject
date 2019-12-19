@@ -38,6 +38,7 @@ import java.util.Locale;
 public class Tab5_Activity extends AppCompatActivity {
     AlertDialog alram;
     Button alram_setting;
+    Tab4_Activity tab4 = new Tab4_Activity();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -166,6 +167,7 @@ public class Tab5_Activity extends AppCompatActivity {
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        tab4.cal_Dday();
 
 
         // 사용자가 매일 알람을 허용했다면
