@@ -55,7 +55,8 @@ public class Tab4_Activity extends AppCompatActivity {
                 vo.date = cursor3.getString(1);
                 data.add(vo);
                 adapter.notifyDataSetChanged();
-            }
+            }/*
+            db3.execSQL("delete from " + "D_DAY");*/
         }
         db3.close();
     }

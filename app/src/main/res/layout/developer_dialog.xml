@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/cardview_light_background"
+    android:layout_marginBottom="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="개발자"
+        android:textStyle="bold"
+        android:textColor="#748A9D"
+        android:textSize="30dp"/>
+    <View
+        android:id="@+id/toolLine"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/setting"
+        android:background="@color/divider" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="유찬양"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textColor="#748A9D"
+        android:textSize="30dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="김의현"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textColor="#748A9D"
+        android:textSize="30dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="임대호"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textColor="#748A9D"
+        android:textSize="30dp"/>
+</LinearLayout>

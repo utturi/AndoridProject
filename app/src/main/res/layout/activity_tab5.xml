@@ -1,51 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:weightSum="15">
 
     <TextView
         android:id="@+id/setting"
-        android:textColor="#748A9D"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:padding="10dp"
         android:text="Setting"
+        android:textColor="#748A9D"
         android:textSize="30dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
+
     <View
         android:id="@+id/toolLine"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@id/setting"
-        android:background="@color/divider"/>
+        android:background="@color/divider" />
 
-    <Button
+
+    <TextView
         android:id="@+id/logout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text = "Logout"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginRight="15dp"
+        android:layout_weight="1"
+        android:backgroundTint="#FAFFFF"
+        android:drawablePadding="15dp"
+        android:gravity="fill"
+        android:text="Logout"
+        android:textColor="#AA000000" />
 
-    <Button
-        android:onClick="OnClickHandler"
-        android:id="@+id/alram_button"
-        android:layout_width="wrap_content"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/logout"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/divider" />
+
+    <Switch
+        android:id="@+id/alarm_switch"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text = "알림 설정"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#FAFFFF"
+        android:drawablePadding="15dp"
+        android:text="알림 설정"
+        android:textColor="#AA000000" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/alarm_switch"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text= "개발자"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="13dp"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/alram_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FAFFFF"
+            android:drawablePadding="15dp"
+            android:gravity="fill"
+            android:text="알림 시간 설정"
+            android:textColor="#AA000000" />
+
+        <TextView
+            android:id="@+id/alarm_time"
+            android:gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FAFFFF"
+            android:drawablePadding="15dp"
+            android:text=""
+            android:textColor="#AA000000" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/alram_button"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/divider" />
+
+    <TextView
+        android:id="@+id/developer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+
+        android:layout_marginRight="15dp"
+
+        android:layout_weight="1"
+        android:backgroundTint="#FAFFFF"
+        android:drawablePadding="15dp"
+        android:gravity="fill"
+        android:text="개발자"
+        android:textColor="#AA000000" />
+
+    <View
+        android:id="@+id/last_set"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/developer"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/divider" />
 
 </LinearLayout>
