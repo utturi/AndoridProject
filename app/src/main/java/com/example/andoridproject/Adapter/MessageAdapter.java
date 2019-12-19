@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.andoridproject.Activity.ReadMessageActivity;
 import com.example.andoridproject.R;
-
 import java.util.ArrayList;
 
 public class MessageAdapter extends BaseAdapter {

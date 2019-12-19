@@ -2,7 +2,6 @@ package com.example.andoridproject.Etc;
 
 import android.view.View;
 import android.widget.TextView;
-
 import com.example.andoridproject.R;
 
 public class DriveHolder {

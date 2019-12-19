@@ -23,7 +23,6 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.andoridproject.Adapter.CommentAdapter;
 import com.example.andoridproject.Etc.DBHelper2;
 import com.example.andoridproject.Item.Board;

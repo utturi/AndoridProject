@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.andoridproject.Item.Comment;
 import com.example.andoridproject.R;
-
 import java.util.ArrayList;
 
 public class CommentAdapter extends BaseAdapter {

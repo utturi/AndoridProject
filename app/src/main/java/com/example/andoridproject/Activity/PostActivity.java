@@ -7,7 +7,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.example.andoridproject.Item.Board;
 import com.example.andoridproject.R;
 import com.example.andoridproject.Tab.Tab1_Activity;
@@ -15,7 +14,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

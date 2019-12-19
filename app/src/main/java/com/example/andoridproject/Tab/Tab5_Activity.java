@@ -1,6 +1,7 @@
 package com.example.andoridproject.Tab;
 
 import android.app.ActionBar;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -30,7 +31,9 @@ import com.example.andoridproject.Activity.LoginActivity;
 import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Activity.PostDetailActivity;
 import com.example.andoridproject.Etc.AlarmReceiver;
+import com.example.andoridproject.Etc.AlarmService;
 import com.example.andoridproject.Etc.DBHelper2;
+import com.example.andoridproject.Etc.DBHelper3;
 import com.example.andoridproject.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,10 +48,12 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class Tab5_Activity extends AppCompatActivity {
+    public static Context context;
     AlertDialog alram;
     AlertDialog developer_view;
     TextView alram_setting;
     TextView developer_but;
+    TextView alramtime;
     int alarm_check; //알람 on,off판단변수
     Switch sw;
     Tab4_Activity tab4 = new Tab4_Activity();
@@ -57,7 +62,10 @@ public class Tab5_Activity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab5);
-
+        context = this;
+        sw = findViewById(R.id.alarm_switch);
+        alramtime = findViewById(R.id.alarm_time);
+        setSwitch();
         TextView button = findViewById(R.id.logout);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,24 +94,27 @@ public class Tab5_Activity extends AppCompatActivity {
             }
         });
 
-        final TextView alramtime = findViewById(R.id.alarm_time);
-        sw = findViewById(R.id.alarm_switch);
         sw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (sw.isChecked()) {
                     alarm_check = 1;
                     Toast.makeText(getApplicationContext(), "알람이 활성화 되었습니다", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(),AlarmService.class);
+                    intent.putExtra("start",2);
+                    startService(intent);
                 } else {
                     alarm_check = 0;
                     Toast.makeText(getApplicationContext(), "알람이 비활성화 되었습니다", Toast.LENGTH_SHORT).show();
                     Calendar calendar = Calendar.getInstance();
-                    diaryNotification(calendar, alarm_check);
+                    Intent intent = new Intent(getApplicationContext(),AlarmService.class);
+                    intent.putExtra("start",0);
+                    intent.putExtra("Calendar",calendar);
+                    stopService(intent);
                     alramtime.setText(" ");
                 }
             }
         });
-
 
         developer_but = findViewById(R.id.developer);
         developer_but.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +190,11 @@ public class Tab5_Activity extends AppCompatActivity {
                             SharedPreferences.Editor editor = getSharedPreferences("daily alarm", MODE_PRIVATE).edit();
                             editor.putLong("nextNotifyTime", (long) calendar.getTimeInMillis());
                             editor.apply();
-                            diaryNotification(calendar, alarm_check);
+
+                            Intent intent = new Intent(getApplicationContext(),AlarmService.class);
+                            intent.putExtra("start",1);
+                            intent.putExtra("Calendar",calendar);
+                            startService(intent);
                         }
                     }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
                         @Override
@@ -193,7 +208,22 @@ public class Tab5_Activity extends AppCompatActivity {
         });
     }
 
-    void diaryNotification(Calendar calendar, int alarm_check) {
+    public void setSwitch()
+    {
+        if(isServiceRunning(AlarmService.class)==true){
+            sw.setChecked(true);
+            alarm_check = 1;
+            Intent intent = new Intent(getApplicationContext(),AlarmService.class);
+            intent.putExtra("start",3);
+            startService(intent);
+        }
+    }
+    public void setText(Calendar calendar)
+    {
+        Date currentDateTime = calendar.getTime();
+        alramtime.setText(new SimpleDateFormat("a h시 m분", Locale.getDefault()).format(currentDateTime));
+    }
+    public void diaryNotification(Calendar calendar, int alarm_check) {
         Boolean dailyNotify = true; // 무조건 알람을 사용
 
         PackageManager pm = this.getPackageManager();
@@ -205,8 +235,13 @@ public class Tab5_Activity extends AppCompatActivity {
             // 사용자가 매일 알람을 허용했다면
             if (dailyNotify) {
                 if (alarmManager != null) {
+                    alarmManager.cancel(pendingIntent);
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                             AlarmManager.INTERVAL_DAY, pendingIntent);
+                    DBHelper3 helper3 = new DBHelper3(getApplicationContext());
+                    SQLiteDatabase db3 = helper3.getWritableDatabase();
+                    String sql3 = "DELETE FROM D_DAY";
+                    db3.execSQL(sql3);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                     }
@@ -214,7 +249,7 @@ public class Tab5_Activity extends AppCompatActivity {
             }
             tab4.cal_Dday();
         }
-        else {
+        else if(alarm_check == 0){
             alarmManager.cancel(pendingIntent);
         }
     }
@@ -228,5 +263,16 @@ public class Tab5_Activity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         MainActivity.tabHost.setCurrentTab(0);
+    }
+
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

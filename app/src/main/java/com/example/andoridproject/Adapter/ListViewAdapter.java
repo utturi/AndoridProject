@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
 import com.example.andoridproject.Item.ListViewItem;
 import com.example.andoridproject.R;
 

@@ -60,22 +60,16 @@ public class Tab1_Activity extends AppCompatActivity {
     private CircleIndicator indicator;      //인디케이터
     private RecyclerView recyclerView;
     private ScrollView scrollView;
-    //대호
     public static Context CONTEXT;
     private BackPressCloseHandler backPressCloseHandler; // 2번 뒤로가기 종료
-
-    //의현
     public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 123;
     private SpeechRecognizer speechRecog;
-    //FloatingActionButton customDialogBtn;
     AlertDialog customDialog;
-    ImageView but; //?
+    ImageView but;
     ImageView gv;
     FloatingActionButton fab_plus, fab_sound, fab_direct;
     Animation FabOpen, FabClose, FabRClockwise, FabRanticlockwise;
     boolean isOpen = false;
-    //의현
-    //수정
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -276,8 +270,6 @@ public class Tab1_Activity extends AppCompatActivity {
                 public void onResults(Bundle results) {
                     List<String> result_arr = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     String[] arry = result_arr.toArray(new String[result_arr.size()]);
-                    //Toast.makeText(getApplicationContext(), arry[0], Toast.LENGTH_SHORT).show();
-
                     String text = arry[0].replaceAll(" ", "");
                     String name = "", data = "";
                     String[] final_arr;
@@ -362,7 +354,6 @@ public class Tab1_Activity extends AppCompatActivity {
         cursor.moveToNext();
         Toast.makeText(getApplicationContext(), "음식이 등록되었습니다~", Toast.LENGTH_SHORT).show();
         db.close();
-        //setGage();
         setMainbut();
     }
 
@@ -406,7 +397,6 @@ public class Tab1_Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         backPressCloseHandler.onBackPressed();
     }
     public void setRecipe()

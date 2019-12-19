@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ListView;
-
 import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Adapter.BoardAdapter;
 import com.example.andoridproject.Item.Board;
@@ -21,7 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 
 public class Tab3_Activity extends AppCompatActivity {
@@ -102,7 +100,6 @@ public class Tab3_Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         MainActivity.tabHost.setCurrentTab(0);
     }
 }

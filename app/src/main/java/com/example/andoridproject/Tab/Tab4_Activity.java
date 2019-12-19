@@ -4,24 +4,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.widget.ListView;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.andoridproject.Activity.MainActivity;
-import com.example.andoridproject.Adapter.AlertAdapter;
+import com.example.andoridproject.Adapter.AlarmAdapter;
 import com.example.andoridproject.Etc.DBHelper;
 import com.example.andoridproject.Etc.DBHelper3;
 import com.example.andoridproject.Etc.Dday;
+import com.example.andoridproject.Etc.RecyclerViewDecoration;
 import com.example.andoridproject.Item.Alert;
 import com.example.andoridproject.Item.ListViewItem;
 import com.example.andoridproject.R;
-
 import java.util.ArrayList;
 
 public class Tab4_Activity extends AppCompatActivity {
     public Context CONTEXT = Tab1_Activity.CONTEXT;
     public String food;
+    public ArrayList<Alert> data;
+    public AlarmAdapter alarmAdapter;
     String[] arr;
 
     @Override
@@ -29,12 +32,34 @@ public class Tab4_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab4);
 
-        final ListView listView = findViewById(R.id.listview_array);
-        final ArrayList<Alert> data = new ArrayList<>();
+        //리사이클러뷰 스와이프 삭제 구현
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
 
-        AlertAdapter adapter = new AlertAdapter(this, R.layout.alert_item, data);
-        listView.setAdapter(adapter);
-
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                DBHelper3 helper3 = new DBHelper3(CONTEXT);
+                SQLiteDatabase db3 = helper3.getWritableDatabase();
+                String sql = "DELETE FROM D_DAY WHERE name = '" + data.get(position).title + "' AND date = '" + data.get(position).date + "';";
+                db3.execSQL(sql);
+                data.remove(position);
+                alarmAdapter.notifyItemRemoved(position);
+            }
+        };
+        data = new ArrayList<>();
+        alarmAdapter = new AlarmAdapter(this,data);
+        RecyclerView recyclerView = findViewById(R.id.listview_array);
+        recyclerView.setAdapter(alarmAdapter);
+        recyclerView.addItemDecoration(new RecyclerViewDecoration(48));
+        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         ListViewItem[] item;
         DBHelper3 helper3 = new DBHelper3(CONTEXT);
         SQLiteDatabase db3 = helper3.getWritableDatabase();
@@ -50,13 +75,12 @@ public class Tab4_Activity extends AppCompatActivity {
                 item[i].setDate(date);
 
                 Alert vo = new Alert();
-                vo.content = ("D-1 유통기한 알림");
+                vo.content = ("D-1 ");
                 vo.title = cursor3.getString(0);
                 vo.date = cursor3.getString(1);
                 data.add(vo);
-                adapter.notifyDataSetChanged();
-            }/*
-            db3.execSQL("delete from " + "D_DAY");*/
+                alarmAdapter.notifyDataSetChanged();
+            }
         }
         db3.close();
     }
@@ -97,7 +121,6 @@ public class Tab4_Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         MainActivity.tabHost.setCurrentTab(0);
     }
 }

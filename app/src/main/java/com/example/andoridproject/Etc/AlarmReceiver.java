@@ -10,21 +10,15 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
-
 import androidx.core.app.NotificationCompat;
-
-import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Activity.SplashActivity;
 import com.example.andoridproject.Item.ListViewItem;
 import com.example.andoridproject.R;
 import com.example.andoridproject.Tab.Tab1_Activity;
-import com.example.andoridproject.Tab.Tab5_Activity;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class AlarmReceiver extends BroadcastReceiver {

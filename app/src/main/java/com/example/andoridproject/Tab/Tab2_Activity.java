@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ListView;
 import android.widget.TabHost;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.andoridproject.Activity.MainActivity;
 import com.example.andoridproject.Adapter.MessageAdapter;
 import com.example.andoridproject.R;
@@ -19,10 +17,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 
-//TAB2 BACK UP
 
 public class Tab2_Activity extends AppCompatActivity {
     ArrayList<String> recieve;
@@ -133,7 +129,6 @@ public class Tab2_Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         MainActivity.tabHost.setCurrentTab(0);
     }
 }

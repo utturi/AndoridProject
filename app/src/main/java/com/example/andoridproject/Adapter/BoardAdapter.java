@@ -10,9 +10,6 @@ import android.widget.TextView;
 import com.example.andoridproject.Item.Board;
 import com.example.andoridproject.Activity.PostDetailActivity;
 import com.example.andoridproject.R;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class BoardAdapter extends BaseAdapter {
