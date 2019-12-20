@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class Tab4_Activity extends AppCompatActivity {
     public Context CONTEXT = Tab1_Activity.CONTEXT;
+    public static Context context;
     public String food;
     public ArrayList<Alert> data;
     public AlarmAdapter alarmAdapter;
@@ -31,7 +32,7 @@ public class Tab4_Activity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab4);
-
+        context = this;
         //리사이클러뷰 스와이프 삭제 구현
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -101,10 +102,10 @@ public class Tab4_Activity extends AppCompatActivity {
                 items[i].setDate(date);
                 String[] calcDate = items[i].getDate().split("-");
                 int Dday_result = Dday.caldate(Integer.parseInt(calcDate[0]), Integer.parseInt(calcDate[1]), Integer.parseInt(calcDate[2]));
-                if (Dday_result == -1)
+                if (Dday_result == -1) {
                     arr = new String[]{food, date};
-
-                insertDB(arr);
+                    insertDB(arr);
+                }
             }
         }
     }

@@ -1,10 +1,7 @@
 package com.example.andoridproject.Tab;
 
-import android.app.ActionBar;
-import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,35 +13,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.andoridproject.Activity.LoginActivity;
 import com.example.andoridproject.Activity.MainActivity;
-import com.example.andoridproject.Activity.PostDetailActivity;
 import com.example.andoridproject.Etc.AlarmReceiver;
-import com.example.andoridproject.Etc.AlarmService;
 import com.example.andoridproject.Etc.DBHelper2;
 import com.example.andoridproject.Etc.DBHelper3;
 import com.example.andoridproject.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class Tab5_Activity extends AppCompatActivity {
@@ -65,7 +49,7 @@ public class Tab5_Activity extends AppCompatActivity {
         context = this;
         sw = findViewById(R.id.alarm_switch);
         alramtime = findViewById(R.id.alarm_time);
-        setSwitch();
+        setting();
         TextView button = findViewById(R.id.logout);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,18 +84,26 @@ public class Tab5_Activity extends AppCompatActivity {
                 if (sw.isChecked()) {
                     alarm_check = 1;
                     Toast.makeText(getApplicationContext(), "알람이 활성화 되었습니다", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(),AlarmService.class);
-                    intent.putExtra("start",2);
-                    startService(intent);
+                    SharedPreferences sf = getSharedPreferences("Setting", 0);
+                    SharedPreferences.Editor editor1 = sf.edit();//저장하려면 editor가 필요
+                    String str = alramtime.getText().toString(); // 사용자가 입력한 값
+                    editor1.putString("time", str); // 입력
+                    editor1.putBoolean("switch", sw.isChecked()); // 입력
+                    editor1.commit(); // 파일에 최종 반영함
                 } else {
                     alarm_check = 0;
                     Toast.makeText(getApplicationContext(), "알람이 비활성화 되었습니다", Toast.LENGTH_SHORT).show();
-                    Calendar calendar = Calendar.getInstance();
-                    Intent intent = new Intent(getApplicationContext(),AlarmService.class);
-                    intent.putExtra("start",0);
-                    intent.putExtra("Calendar",calendar);
-                    stopService(intent);
+                    Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, alarmIntent, 0);
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    alarmManager.cancel(pendingIntent);
                     alramtime.setText(" ");
+                    SharedPreferences sf = getSharedPreferences("Setting", 0);
+                    SharedPreferences.Editor editor1 = sf.edit();//저장하려면 editor가 필요
+                    String str = alramtime.getText().toString(); // 사용자가 입력한 값
+                    editor1.putString("time", str); // 입력
+                    editor1.putBoolean("switch", sw.isChecked()); // 입력
+                    editor1.commit(); // 파일에 최종 반영함
                 }
             }
         });
@@ -185,16 +177,18 @@ public class Tab5_Activity extends AppCompatActivity {
 
                             Date currentDateTime = calendar.getTime();
                             alramtime.setText(new SimpleDateFormat("a h시 m분", Locale.getDefault()).format(currentDateTime));
+                            SharedPreferences sf = getSharedPreferences("Setting", 0);
+                            SharedPreferences.Editor editor1 = sf.edit();//저장하려면 editor가 필요
+                            String str = alramtime.getText().toString(); // 사용자가 입력한 값
+                            editor1.putString("time", str); // 입력
+                            editor1.putBoolean("switch", sw.isChecked()); // 입력
+                            editor1.commit(); // 파일에 최종 반영함
 
                             //  Preference에 설정한 값 저장
                             SharedPreferences.Editor editor = getSharedPreferences("daily alarm", MODE_PRIVATE).edit();
                             editor.putLong("nextNotifyTime", (long) calendar.getTimeInMillis());
                             editor.apply();
-
-                            Intent intent = new Intent(getApplicationContext(),AlarmService.class);
-                            intent.putExtra("start",1);
-                            intent.putExtra("Calendar",calendar);
-                            startService(intent);
+                            diaryNotification(calendar, alarm_check);
                         }
                     }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
                         @Override
@@ -208,21 +202,6 @@ public class Tab5_Activity extends AppCompatActivity {
         });
     }
 
-    public void setSwitch()
-    {
-        if(isServiceRunning(AlarmService.class)==true){
-            sw.setChecked(true);
-            alarm_check = 1;
-            Intent intent = new Intent(getApplicationContext(),AlarmService.class);
-            intent.putExtra("start",3);
-            startService(intent);
-        }
-    }
-    public void setText(Calendar calendar)
-    {
-        Date currentDateTime = calendar.getTime();
-        alramtime.setText(new SimpleDateFormat("a h시 m분", Locale.getDefault()).format(currentDateTime));
-    }
     public void diaryNotification(Calendar calendar, int alarm_check) {
         Boolean dailyNotify = true; // 무조건 알람을 사용
 
@@ -265,14 +244,19 @@ public class Tab5_Activity extends AppCompatActivity {
         MainActivity.tabHost.setCurrentTab(0);
     }
 
-
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
+    public void setting()
+    {
+        SharedPreferences sf = getSharedPreferences("Setting", 0);
+        String str = sf.getString("time", ""); // 키값으로 꺼냄
+        alramtime.setText(str); // EditText에 반영함
+        if(sf.getBoolean("switch",false)) {
+            sw.setChecked(true);
+            alarm_check = 1;
         }
-        return false;
+        else
+        {
+            sw.setChecked(false);
+            alarm_check = 0;
+        }
     }
 }

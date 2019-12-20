@@ -15,6 +15,8 @@ import com.example.andoridproject.Activity.SplashActivity;
 import com.example.andoridproject.Item.ListViewItem;
 import com.example.andoridproject.R;
 import com.example.andoridproject.Tab.Tab1_Activity;
+import com.example.andoridproject.Tab.Tab4_Activity;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,12 +27,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     public Context CONTEXT = Tab1_Activity.CONTEXT;
     public String food;
     int count = 0;
+    String arr[];
 
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, SplashActivity.class);
-
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent pendingI = PendingIntent.getActivity(context, 0, notificationIntent, 0);
@@ -86,7 +88,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                             .setContentText("유통기한 만료까지 하루 남았습니다. 확인하러 갈까요?")
                             .setContentInfo("INFO")
                             .setContentIntent(pendingI);
-                } else {
+                } else if(count > 1) {
                     builder.setAutoCancel(true)
                             .setDefaults(NotificationCompat.DEFAULT_ALL)
                             .setWhen(System.currentTimeMillis())
@@ -124,4 +126,5 @@ public class AlarmReceiver extends BroadcastReceiver {
             db.close();
         }
     }
+
 }

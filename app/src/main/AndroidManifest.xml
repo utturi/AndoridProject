@@ -41,7 +41,6 @@
         <activity android:name=".Tab.Tab4_Activity" />
         <activity android:name=".Tab.Tab5_Activity" />
         <receiver android:name=".Etc.AlarmReceiver" />
-        <service android:name=".Etc.AlarmService"  />
 
     </application>
 
