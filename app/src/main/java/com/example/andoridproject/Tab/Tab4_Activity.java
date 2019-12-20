@@ -18,6 +18,10 @@ import com.example.andoridproject.Etc.RecyclerViewDecoration;
 import com.example.andoridproject.Item.Alert;
 import com.example.andoridproject.Item.ListViewItem;
 import com.example.andoridproject.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class Tab4_Activity extends AppCompatActivity {
@@ -61,6 +65,7 @@ public class Tab4_Activity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
         ListViewItem[] item;
         DBHelper3 helper3 = new DBHelper3(CONTEXT);
         SQLiteDatabase db3 = helper3.getWritableDatabase();
@@ -105,6 +110,7 @@ public class Tab4_Activity extends AppCompatActivity {
                 if (Dday_result == -1) {
                     arr = new String[]{food, date};
                     insertDB(arr);
+                    insertDB2(arr);
                 }
             }
         }
@@ -123,5 +129,11 @@ public class Tab4_Activity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         MainActivity.tabHost.setCurrentTab(0);
+    }
+
+
+    public void insertDB2(String[] arr) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("FoodLimits").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        database.push().setValue((arr[0]+"#"+arr[1]));
     }
 }

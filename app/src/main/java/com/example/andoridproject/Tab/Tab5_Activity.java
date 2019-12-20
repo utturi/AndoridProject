@@ -26,6 +26,9 @@ import com.example.andoridproject.Etc.DBHelper2;
 import com.example.andoridproject.Etc.DBHelper3;
 import com.example.andoridproject.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -221,6 +224,9 @@ public class Tab5_Activity extends AppCompatActivity {
                     SQLiteDatabase db3 = helper3.getWritableDatabase();
                     String sql3 = "DELETE FROM D_DAY";
                     db3.execSQL(sql3);
+                    DatabaseReference database = FirebaseDatabase.getInstance().getReference("FoodLimits").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    database.removeValue();
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                     }
