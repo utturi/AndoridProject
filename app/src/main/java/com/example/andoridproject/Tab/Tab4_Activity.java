@@ -133,6 +133,7 @@ public class Tab4_Activity extends AppCompatActivity {
 
 
     public void insertDB2(String[] arr) {
+        //backup
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("FoodLimits").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         database.push().setValue((arr[0]+"#"+arr[1]));
     }
